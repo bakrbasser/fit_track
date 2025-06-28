@@ -37,7 +37,6 @@ class AppDatabase {
     reps        INTEGER,
     isAchieved  INTEGER DEFAULT (0) 
 )
-
     ''');
 
     await db.execute('''
@@ -48,15 +47,6 @@ class AppDatabase {
     weight      INTEGER NOT NULL,
     sets                NOT NULL
 )
-
-    ''');
-
-    await db.execute('''
-      CREATE TABLE exercises (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        instructions TEXT
-      )
     ''');
 
     await db.execute('''
@@ -65,7 +55,6 @@ class AppDatabase {
     name        TEXT    NOT NULL,
     description TEXT
 )
-
     ''');
 
     await db.execute('''
@@ -79,7 +68,6 @@ class AppDatabase {
 )
 
     ''');
-
     await db.execute('''
 CREATE TABLE trainingPlan_trainingDay (
     trainingDay_id   INTEGER REFERENCES training_day (id) 
@@ -98,8 +86,6 @@ CREATE TABLE trainingDay_exercise (
     sets          INTEGER NOT NULL,
     reps          INTEGER NOT NULL
 )
-
-
     ''');
   }
 
