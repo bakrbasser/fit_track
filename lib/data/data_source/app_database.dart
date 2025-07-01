@@ -2,14 +2,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class AppDatabase {
-  static Database? _db;
+  static final AppDatabase instance = AppDatabase._internal();
+  AppDatabase._internal();
+  static Database? _database;
   static const int _version = 1;
-  static const String _dbName = "gym_tracker.db";
+  static const String _dbName = "fit_tracker.db";
 
-  static Future<Database> get instance async {
-    if (_db != null) return _db!;
-    _db = await _initDB();
-    return _db!;
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDB();
+    return _database!;
   }
 
   static Future<Database> _initDB() async {
@@ -89,8 +91,8 @@ CREATE TABLE trainingDay_exercise (
     ''');
   }
 
-  static Future<void> close() async {
-    final db = _db;
+  Future<void> close() async {
+    final db = _database;
     if (db != null) await db.close();
   }
 }
