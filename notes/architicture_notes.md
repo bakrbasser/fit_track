@@ -195,20 +195,3 @@ class ExerciseCubit extends Cubit<ExerciseState> {
 | Presentation | UI + State Management     | Domain only |
 | Core         | Helpers & constants       | Shared      |
 
----
-
-## 📌 Next Step Suggestion
-
-Let's take this forward step-by-step. You choose:
-
-### 🚀 Start Coding:
-
-1. I generate the folder structure + example feature.
-2. We implement one feature end-to-end (e.g., Exercise CRUD).
-
-### 🧱 Setup Prep:
-
-1. Set up `get_it` + `injectable` for dependency injection
-2. Define base entities and abstract repositories in `/domain`
-
-What would you like to do next?
