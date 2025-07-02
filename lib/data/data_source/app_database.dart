@@ -42,13 +42,14 @@ class AppDatabase {
     ''');
 
     await db.execute('''
-      CREATE TABLE exercise_log (
+CREATE TABLE exercise_log (
     exercise_id INTEGER REFERENCES exercise (id) 
                         NOT NULL,
     date        TEXT    NOT NULL,
     weight      INTEGER NOT NULL,
-    sets                NOT NULL
-)
+    sets        INTEGER NOT NULL,
+    reps        INTEGER NOT NULL
+);
     ''');
 
     await db.execute('''

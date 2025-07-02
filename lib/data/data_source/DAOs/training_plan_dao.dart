@@ -3,7 +3,6 @@ import 'package:fit_track/data/data_source/app_database.dart';
 import 'package:fit_track/data/models/training_day_model.dart';
 import 'package:fit_track/data/models/training_plan_model.dart';
 import 'package:fit_track/data/models/training_plan_training_day_model.dart';
-import 'package:fit_track/domain/entities/training_plan_training_day.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TrainingPlanDAO {
@@ -51,7 +50,7 @@ class TrainingPlanDAO {
       FROM training_day
           INNER JOIN
           trainingPlan_trainingDay ON training_day.id = trainingDay_id
-    WHERE trainingPlan_trainingDay.trainingPlan_id = '?';
+    WHERE trainingPlan_trainingDay.trainingPlan_id = ?;
 ''',
       [trainingPlanID],
     );
