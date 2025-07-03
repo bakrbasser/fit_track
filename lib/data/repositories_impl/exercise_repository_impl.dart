@@ -4,7 +4,7 @@ import 'package:fit_track/domain/entities/exercise.dart';
 
 import '../../domain/repositories/exercises_repository.dart';
 
-class ExerciseRepositoryImpl implements ExercisesRepository {
+class ExercisesRepositoryImpl implements ExercisesRepository {
   final ExerciseDao _dao = ExerciseDao.instance;
 
   @override
