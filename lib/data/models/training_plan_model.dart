@@ -15,7 +15,8 @@ class TrainingPlanModel {
     this.isActivated = false,
   });
 
-  factory TrainingPlanModel.fromJson(Map<String, dynamic> json) => TrainingPlanModel(
+  factory TrainingPlanModel.fromJson(Map<String, dynamic> json) =>
+      TrainingPlanModel(
         id: json['id'],
         name: json['name'],
         description: json['description'],
@@ -24,14 +25,15 @@ class TrainingPlanModel {
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'description': description,
-        'icon': icon,
-        'isActivated': isActivated ? 1 : 0,
-      };
+    'id': id,
+    'name': name,
+    'description': description,
+    'icon': icon,
+    'isActivated': isActivated ? 1 : 0,
+  };
 
-  factory TrainingPlanModel.fromEntity(TrainingPlan entity) => TrainingPlanModel(
+  factory TrainingPlanModel.fromEntity(TrainingPlan entity) =>
+      TrainingPlanModel(
         id: entity.id,
         name: entity.name,
         description: entity.description,
@@ -40,10 +42,10 @@ class TrainingPlanModel {
       );
 
   TrainingPlan toEntity() => TrainingPlan(
-        id: id,
-        name: name,
-        description: description,
-        icon: icon,
-        isActivated: isActivated,
-      );
+    id: id,
+    name: name,
+    description: description,
+    icon: icon,
+    isActivated: isActivated,
+  );
 }

@@ -1,0 +1,2 @@
+C:/Users/BAKER ALBASSER/Desktop/TryProjects/weather/android/app/.cxx/Debug/j6r5c4b5/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/BAKER ALBASSER/Desktop/TryProjects/weather/android/app/.cxx/Debug/j6r5c4b5/x86_64/CMakeFiles/rebuild_cache.dir

@@ -20,11 +20,15 @@ class AddExerciseCubit extends Cubit<AddExerciseState> {
       return;
     } else {
       if (_name!.length <= 3) {
-      emit(Error(message: StringManager.shortExerciseName));
-      return;
+        emit(Error(message: StringManager.shortExerciseName));
+        return;
       }
     }
-    final Exercise newExercise = Exercise(id: 0, name: name)
+    await exercisesRepo.addExercise(
+      exercise: Exercise(id: null, name: _name!, instructions: _instructions),
+    );
+    final Exercise newExercise = await exercisesRepo.fetchLastExercise();
 
+    emit(AddedExercise(exercise: newExercise));
   }
 }

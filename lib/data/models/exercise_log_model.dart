@@ -13,7 +13,8 @@ class ExerciseLogModel {
     required this.sets,
   });
 
-  factory ExerciseLogModel.fromJson(Map<String, dynamic> json) => ExerciseLogModel(
+  factory ExerciseLogModel.fromJson(Map<String, dynamic> json) =>
+      ExerciseLogModel(
         exerciseId: json['exercise_id'],
         date: json['date'],
         weight: json['weight'],
@@ -21,23 +22,23 @@ class ExerciseLogModel {
       );
 
   Map<String, dynamic> toJson() => {
-        'exercise_id': exerciseId,
-        'date': date,
-        'weight': weight,
-        'sets': sets,
-      };
+    'exercise_id': exerciseId,
+    'date': date,
+    'weight': weight,
+    'sets': sets,
+  };
 
   factory ExerciseLogModel.fromEntity(ExerciseLog entity) => ExerciseLogModel(
-        exerciseId: entity.exerciseId,
-        date: entity.date,
-        weight: entity.weight,
-        sets: entity.sets,
-      );
+    exerciseId: entity.exerciseId,
+    date: entity.date,
+    weight: entity.weight,
+    sets: entity.sets,
+  );
 
   ExerciseLog toEntity() => ExerciseLog(
-        exerciseId: exerciseId,
-        date: date,
-        weight: weight,
-        sets: sets,
-      );
+    exerciseId: exerciseId,
+    date: date,
+    weight: weight,
+    sets: sets,
+  );
 }

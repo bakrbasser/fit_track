@@ -22,11 +22,11 @@ class TrainingDayExerciseModel {
       );
 
   Map<String, dynamic> toJson() => {
-        'trainingDay_id': trainingDayId,
-        'exercise_id': exerciseId,
-        'sets': sets,
-        'reps': reps,
-      };
+    'trainingDay_id': trainingDayId,
+    'exercise_id': exerciseId,
+    'sets': sets,
+    'reps': reps,
+  };
 
   factory TrainingDayExerciseModel.fromEntity(TrainingDayExercise entity) =>
       TrainingDayExerciseModel(
@@ -37,9 +37,9 @@ class TrainingDayExerciseModel {
       );
 
   TrainingDayExercise toEntity() => TrainingDayExercise(
-        trainingDayId: trainingDayId,
-        exerciseId: exerciseId,
-        sets: sets,
-        reps: reps,
-      );
+    trainingDayId: trainingDayId,
+    exerciseId: exerciseId,
+    sets: sets,
+    reps: reps,
+  );
 }

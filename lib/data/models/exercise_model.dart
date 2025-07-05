@@ -1,7 +1,7 @@
 import '../../domain/entities/exercise.dart';
 
 class ExerciseModel {
-  final int id;
+  final int? id;
   final String name;
   final String? instructions;
 

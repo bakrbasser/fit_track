@@ -35,4 +35,10 @@ class ExercisesRepositoryImpl implements ExercisesRepository {
     final models = await _dao.getAll();
     _exercises = models.map((e) => e.toEntity()).toList();
   }
+
+  @override
+  Future<Exercise> fetchLastExercise() async {
+    final model = await _dao.getLast();
+    return model.toEntity();
+  }
 }

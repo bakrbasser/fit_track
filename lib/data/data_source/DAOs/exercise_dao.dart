@@ -35,4 +35,14 @@ class ExerciseDao {
     final query = await db.query(TablesName.exercises);
     return query.map((e) => ExerciseModel.fromJson(e)).toList();
   }
+
+  Future<ExerciseModel> getLast() async {
+    final db = await _db;
+    final query = await db.query(
+      TablesName.exercises,
+      limit: 1,
+      orderBy: 'id DESC',
+    );
+    return ExerciseModel.fromJson(query[0]);
+  }
 }

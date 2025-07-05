@@ -1,0 +1,2 @@
+C:/Users/BAKER ALBASSER/Desktop/FitTrack/fit_track/android/app/.cxx/Debug/5w559322/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/BAKER ALBASSER/Desktop/FitTrack/fit_track/android/app/.cxx/Debug/5w559322/arm64-v8a/CMakeFiles/rebuild_cache.dir

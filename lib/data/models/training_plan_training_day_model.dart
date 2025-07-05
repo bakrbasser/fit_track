@@ -16,18 +16,19 @@ class TrainingPlanTrainingDayModel {
       );
 
   Map<String, dynamic> toJson() => {
-        'trainingPlan_id': trainingPlanId,
-        'trainingDay_id': trainingDayId,
-      };
+    'trainingPlan_id': trainingPlanId,
+    'trainingDay_id': trainingDayId,
+  };
 
-  factory TrainingPlanTrainingDayModel.fromEntity(TrainingPlanTrainingDay entity) =>
-      TrainingPlanTrainingDayModel(
-        trainingPlanId: entity.trainingPlanId,
-        trainingDayId: entity.trainingDayId,
-      );
+  factory TrainingPlanTrainingDayModel.fromEntity(
+    TrainingPlanTrainingDay entity,
+  ) => TrainingPlanTrainingDayModel(
+    trainingPlanId: entity.trainingPlanId,
+    trainingDayId: entity.trainingDayId,
+  );
 
   TrainingPlanTrainingDay toEntity() => TrainingPlanTrainingDay(
-        trainingPlanId: trainingPlanId,
-        trainingDayId: trainingDayId,
-      );
+    trainingPlanId: trainingPlanId,
+    trainingDayId: trainingDayId,
+  );
 }
