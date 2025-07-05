@@ -12,12 +12,16 @@ class GoalRepositoryImpl implements GoalRepository {
   @override
   Future addGoal({required Goal goal}) async {
     final model = GoalModel.fromEntity(goal);
-    await _dao.addGoal(goal: model);
-  }
-
-  @override
-  Future deleteGoal({required int goalId}) async {
-    _dao.deleteGoal(goalId: goalId);
+    int id = await _dao.addGoal(goal: model);
+    _goals.add(
+      Goal(
+        id: id,
+        exerciseId: goal.exerciseId,
+        isAchieved: goal.isAchieved,
+        reps: goal.reps,
+        weight: goal.weight,
+      ),
+    );
   }
 
   @override
@@ -27,8 +31,19 @@ class GoalRepositoryImpl implements GoalRepository {
   }
 
   @override
-  Future updateGoal({required Goal goal}) async {
+  Future<void> updateGoal({required Goal goal}) async {
     final model = GoalModel.fromEntity(goal);
     await _dao.updateGoal(goal: model);
+
+    final index = _goals.indexWhere((g) => g.id == goal.id);
+    if (index != -1) {
+      _goals[index] = goal;
+    }
+  }
+
+  @override
+  Future<void> deleteGoal({required int goalId}) async {
+    await _dao.deleteGoal(goalId: goalId);
+    _goals.removeWhere((goal) => goal.id == goalId);
   }
 }

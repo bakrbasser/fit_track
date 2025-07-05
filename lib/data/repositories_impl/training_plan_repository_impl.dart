@@ -8,15 +8,49 @@ import 'package:fit_track/domain/repositories/training_plan_repository.dart';
 
 class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   final TrainingPlanDAO _dao = TrainingPlanDAO.instance;
+
+  List<TrainingPlan> _trainingPlans = [];
+  List<TrainingPlan> get trainingPlans => _trainingPlans;
+
   @override
-  Future addTrainingPlan({required TrainingPlan trainingPlan}) async {
-    final model = TrainingPlanModel.fromEntity(trainingPlan);
-    await _dao.addTrainingPlan(trainingPlan: model);
+  Future fetchTrainingPlans() async {
+    final plans = await _dao.fetchTrainingPlans();
+    _trainingPlans = List.generate(
+      plans.length,
+      (index) => plans[index].toEntity(),
+    );
   }
 
   @override
-  Future deleteTrainingPlan({required int trainingPlanId}) async {
+  Future addTrainingPlan({required TrainingPlan trainingPlan}) async {
+    final model = TrainingPlanModel.fromEntity(trainingPlan);
+    int id = await _dao.addTrainingPlan(trainingPlan: model);
+    _trainingPlans.add(
+      TrainingPlan(
+        id: id,
+        name: trainingPlan.name,
+        description: trainingPlan.description,
+        icon: trainingPlan.icon,
+        isActivated: trainingPlan.isActivated,
+      ),
+    );
+  }
+
+  @override
+  Future<void> deleteTrainingPlan({required int trainingPlanId}) async {
     await _dao.deleteTrainingPlan(trainingPlanId: trainingPlanId);
+    _trainingPlans.removeWhere((plan) => plan.id == trainingPlanId);
+  }
+
+  @override
+  Future<void> updateTrainingPlan({required TrainingPlan trainingPlan}) async {
+    final model = TrainingPlanModel.fromEntity(trainingPlan);
+    await _dao.updateTrainingPlan(trainingPlan: model);
+
+    final index = _trainingPlans.indexWhere((p) => p.id == trainingPlan.id);
+    if (index != -1) {
+      _trainingPlans[index] = trainingPlan;
+    }
   }
 
   @override
@@ -27,12 +61,6 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
       trainingPlanID: trainingPlanID,
     );
     return List.generate(days.length, (index) => days[index].toEntity());
-  }
-
-  @override
-  Future<List<TrainingPlan>> fetchTrainingPlans() async {
-    final plans = await _dao.fetchTrainingPlans();
-    return List.generate(plans.length, (index) => plans[index].toEntity());
   }
 
   @override
@@ -53,11 +81,5 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
       trainingPlanTrainingDay,
     );
     await _dao.removeLinkDayToPlan(model: model);
-  }
-
-  @override
-  Future updateTrainingPlan({required TrainingPlan trainingPlan}) async {
-    final model = TrainingPlanModel.fromEntity(trainingPlan);
-    await _dao.updateTrainingPlan(trainingPlan: model);
   }
 }

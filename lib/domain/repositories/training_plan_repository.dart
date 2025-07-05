@@ -3,7 +3,7 @@ import 'package:fit_track/domain/entities/training_plan.dart';
 import 'package:fit_track/domain/entities/training_plan_training_day.dart';
 
 abstract class TrainingPlanRepository {
-  Future<List<TrainingPlan>> fetchTrainingPlans();
+  Future fetchTrainingPlans();
   Future addTrainingPlan({required TrainingPlan trainingPlan});
   Future updateTrainingPlan({required TrainingPlan trainingPlan});
   Future deleteTrainingPlan({required int trainingPlanId});
