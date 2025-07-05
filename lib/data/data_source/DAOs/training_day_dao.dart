@@ -73,7 +73,7 @@ class TrainingDayDao {
     final db = await _db;
     final query = await db.rawQuery(
       '''
-    SELECT *
+    SELECT exercise_id, sets, reps
       FROM exercise
           INNER JOIN
           trainingDay_exercise ON exercise.id = exercise_id

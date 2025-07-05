@@ -7,12 +7,12 @@ class Exercise {
 }
 
 class DetailedExercise {
-  final Exercise exercise;
+  final int exerciseID;
   final int sets;
   final int reps;
 
   DetailedExercise({
-    required this.exercise,
+    required this.exerciseID,
     required this.sets,
     required this.reps,
   });

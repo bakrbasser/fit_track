@@ -30,19 +30,19 @@ class ExerciseModel {
 }
 
 class DetailedExerciseModel {
-  final ExerciseModel exercise;
+  final int exerciseID;
   final int sets;
   final int reps;
 
   DetailedExerciseModel({
-    required this.exercise,
+    required this.exerciseID,
     required this.sets,
     required this.reps,
   });
 
   // Convert to JSON (for API/local storage)
   Map<String, dynamic> toJson() => {
-    'exercise': exercise.toJson(), // Assumes Exercise has toJson()
+    'exercise_id': exerciseID, // Assumes Exercise has toJson()
     'sets': sets,
     'reps': reps,
   };
@@ -50,7 +50,7 @@ class DetailedExerciseModel {
   // Parse from JSON (factory constructor)
   factory DetailedExerciseModel.fromJson(Map<String, dynamic> json) {
     return DetailedExerciseModel(
-      exercise: ExerciseModel.fromJson(json), // Assumes Exercise has fromJson()
+      exerciseID: json['exercise_id'] as int,
       sets: json['sets'] as int,
       reps: json['reps'] as int,
     );
@@ -58,12 +58,12 @@ class DetailedExerciseModel {
 
   // Convert to Entity (for domain layer)
   DetailedExercise toEntity() =>
-      DetailedExercise(exercise: exercise.toEntity(), sets: sets, reps: reps);
+      DetailedExercise(exerciseID: exerciseID, sets: sets, reps: reps);
 
   // Create from Entity (factory constructor)
   factory DetailedExerciseModel.fromEntity(DetailedExercise entity) {
     return DetailedExerciseModel(
-      exercise: ExerciseModel.fromEntity(entity.exercise),
+      exerciseID: entity.exerciseID,
       sets: entity.sets,
       reps: entity.reps,
     );

@@ -5,6 +5,10 @@ import 'package:fit_track/domain/repositories/goal_repository.dart';
 
 class GoalRepositoryImpl implements GoalRepository {
   final _dao = GoalDao.instance;
+
+  List<Goal> _goals = [];
+  List<Goal> get goals => _goals;
+
   @override
   Future addGoal({required Goal goal}) async {
     final model = GoalModel.fromEntity(goal);
@@ -17,9 +21,9 @@ class GoalRepositoryImpl implements GoalRepository {
   }
 
   @override
-  Future<List<Goal>> fetchGoals() async {
+  Future fetchGoals() async {
     final goals = await _dao.fetchGoals();
-    return List.generate(goals.length, (index) => goals[index].toEntity());
+    _goals = List.generate(goals.length, (index) => goals[index].toEntity());
   }
 
   @override

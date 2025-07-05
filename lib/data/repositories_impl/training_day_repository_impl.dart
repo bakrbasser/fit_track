@@ -9,15 +9,21 @@ import 'package:fit_track/domain/repositories/training_day_repository.dart';
 class TrainingDayRepositoryImpl implements TrainingDayRepository {
   final TrainingDayDao _dao = TrainingDayDao.instance;
 
+  List<TrainingDay> _trainingDays = [];
+
+  List<TrainingDay> get trainingDays => _trainingDays;
+
   @override
   Future<void> addTrainingDay({required TrainingDay trainingDay}) async {
     final model = TrainingDayModel.fromEntity(trainingDay);
-    _dao.addTrainingDay(trainingDay: model);
+    await _dao.addTrainingDay(trainingDay: model);
+    _trainingDays.add(trainingDay);
   }
 
   @override
   Future<void> deleteTrainingDay({required int trainingDayID}) async {
     await _dao.deleteTrainingDay(trainingDayID: trainingDayID);
+    _trainingDays.removeWhere((element) => element.id == trainingDayID);
   }
 
   @override
@@ -34,15 +40,22 @@ class TrainingDayRepositoryImpl implements TrainingDayRepository {
   }
 
   @override
-  Future<List<TrainingDay>> fetchTrainingDays() async {
+  Future<void> fetchTrainingDays() async {
     final days = await _dao.fetchTrainingDays();
-    return List.generate(days.length, (index) => days[index].toEntity());
+    _trainingDays = List.generate(
+      days.length,
+      (index) => days[index].toEntity(),
+    );
   }
 
   @override
   Future<void> updateTrainingDay({required TrainingDay trainingDay}) async {
     final day = TrainingDayModel.fromEntity(trainingDay);
     await _dao.updateTrainingDay(trainingDay: day);
+    final idx = _trainingDays.indexWhere(
+      (element) => element.id == trainingDay.id,
+    );
+    _trainingDays[idx] = trainingDay;
   }
 
   @override
