@@ -38,9 +38,9 @@ class TrainingDayDao {
     );
   }
 
-  Future<void> addTrainingDay({required TrainingDayModel trainingDay}) async {
+  Future<int> addTrainingDay({required TrainingDayModel trainingDay}) async {
     final db = await _db;
-    await db.insert(TablesName.trainingDays, trainingDay.toJson());
+    return await db.insert(TablesName.trainingDays, trainingDay.toJson());
   }
 
   Future addTrainingDayExercises({

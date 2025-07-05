@@ -27,7 +27,7 @@ class AddExerciseCubit extends Cubit<AddExerciseState> {
     await exercisesRepo.addExercise(
       exercise: Exercise(id: null, name: _name!, instructions: _instructions),
     );
-    final Exercise newExercise = await exercisesRepo.fetchLastExercise();
+    final Exercise newExercise = exercisesRepo.exercises.last;
 
     emit(AddedExercise(exercise: newExercise));
   }

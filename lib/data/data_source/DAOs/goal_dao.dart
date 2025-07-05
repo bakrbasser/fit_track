@@ -14,9 +14,9 @@ class GoalDao {
     return query.map((e) => GoalModel.fromJson(e)).toList();
   }
 
-  Future addGoal({required GoalModel goal}) async {
+  Future<int> addGoal({required GoalModel goal}) async {
     final db = await _db;
-    await db.insert(TablesName.goals, goal.toJson());
+    return await db.insert(TablesName.goals, goal.toJson());
   }
 
   Future deleteGoal({required int goalId}) async {

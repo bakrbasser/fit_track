@@ -19,9 +19,9 @@ class ExerciseLogDao {
     return query.map((e) => ExerciseLogModel.fromJson(e)).toList();
   }
 
-  Future<void> addExerciseLog({required ExerciseLogModel exerciseLog}) async {
+  Future<int> addExerciseLog({required ExerciseLogModel exerciseLog}) async {
     final db = await _db;
-    await db.insert(TablesName.exerciseLogs, exerciseLog.toJson());
+    return await db.insert(TablesName.exerciseLogs, exerciseLog.toJson());
   }
 
   Future<void> updateExerciseLog({

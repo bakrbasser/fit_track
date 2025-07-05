@@ -10,9 +10,9 @@ class ExerciseDao {
 
   Future<Database> get _db async => await AppDatabase.instance.database;
 
-  Future<void> insert(ExerciseModel exercise) async {
+  Future<int> insert(ExerciseModel exercise) async {
     final db = await _db;
-    await db.insert(TablesName.exercises, exercise.toJson());
+    return await db.insert(TablesName.exercises, exercise.toJson());
   }
 
   Future<void> update(ExerciseModel exercise) async {
@@ -34,15 +34,5 @@ class ExerciseDao {
     final db = await _db;
     final query = await db.query(TablesName.exercises);
     return query.map((e) => ExerciseModel.fromJson(e)).toList();
-  }
-
-  Future<ExerciseModel> getLast() async {
-    final db = await _db;
-    final query = await db.query(
-      TablesName.exercises,
-      limit: 1,
-      orderBy: 'id DESC',
-    );
-    return ExerciseModel.fromJson(query[0]);
   }
 }

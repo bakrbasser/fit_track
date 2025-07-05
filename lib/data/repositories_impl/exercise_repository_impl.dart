@@ -13,8 +13,15 @@ class ExercisesRepositoryImpl implements ExercisesRepository {
 
   @override
   Future<void> addExercise({required Exercise exercise}) async {
-    await _dao.insert(ExerciseModel.fromEntity(exercise));
-    _exercises.add(exercise);
+    final id = await _dao.insert(ExerciseModel.fromEntity(exercise));
+
+    _exercises.add(
+      Exercise(
+        id: id,
+        name: exercise.name,
+        instructions: exercise.instructions,
+      ),
+    );
   }
 
   @override
@@ -34,11 +41,5 @@ class ExercisesRepositoryImpl implements ExercisesRepository {
   Future fetchAllExercises() async {
     final models = await _dao.getAll();
     _exercises = models.map((e) => e.toEntity()).toList();
-  }
-
-  @override
-  Future<Exercise> fetchLastExercise() async {
-    final model = await _dao.getLast();
-    return model.toEntity();
   }
 }

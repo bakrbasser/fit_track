@@ -16,9 +16,9 @@ class TrainingPlanDAO {
     return query.map((e) => TrainingPlanModel.fromJson(e)).toList();
   }
 
-  Future addTrainingPlan({required TrainingPlanModel trainingPlan}) async {
+  Future<int> addTrainingPlan({required TrainingPlanModel trainingPlan}) async {
     final db = await _db;
-    await db.insert(TablesName.trainingPlans, trainingPlan.toJson());
+    return await db.insert(TablesName.trainingPlans, trainingPlan.toJson());
   }
 
   Future deleteTrainingPlan({required int trainingPlanId}) async {

@@ -7,6 +7,4 @@ abstract class ExercisesRepository {
   Future<void> addExercise({required Exercise exercise});
   Future<void> deleteExercise({required int exerciseID});
   Future<void> updateExercise({required Exercise exercise});
-
-  Future<Exercise> fetchLastExercise();
 }
