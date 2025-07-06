@@ -8,4 +8,6 @@ class StringManager {
       'The Name Field Is Empty Please Insert A Name';
   static String get shortExerciseName =>
       'The Name Cant\'t be Less Than 3 Characters';
+  static String get noExerciseFound =>
+      'There are no exercises yet please add some';
 }

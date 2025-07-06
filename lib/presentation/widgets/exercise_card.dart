@@ -15,13 +15,14 @@ class ExerciseCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          height: 55,
-          width: 55,
           decoration: BoxDecoration(
             color: ColorsManager.grey,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Image.asset(AssetsManager.Dumbbell, scale: 0.7),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Image.asset(AssetsManager.Dumbbell, scale: 0.7),
+          ),
         ),
         SizedBox(width: 30),
         Column(

@@ -5,8 +5,8 @@ import 'package:meta/meta.dart';
 
 part 'exercises_list_state.dart';
 
-class ExercisesCubit extends Cubit<ExercisesListState> {
-  ExercisesCubit() : super(ExercisesInitial());
+class ExercisesListCubit extends Cubit<ExercisesListState> {
+  ExercisesListCubit() : super(ExercisesInitial());
   final exercisesRepo = ExercisesRepositoryImpl();
   void loadList() {
     emit(Loading());
