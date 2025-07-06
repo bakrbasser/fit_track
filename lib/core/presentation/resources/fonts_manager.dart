@@ -16,4 +16,12 @@ class FontsManager {
     fontSize: size,
     fontWeight: FontWeight.normal,
   );
+  static TextStyle lexendMedium({
+    double size = 16,
+    Color color = Colors.white,
+  }) => GoogleFonts.lexend(
+    color: color,
+    fontSize: size,
+    fontWeight: FontWeight.w600,
+  );
 }
