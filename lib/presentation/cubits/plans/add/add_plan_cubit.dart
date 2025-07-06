@@ -27,7 +27,7 @@ class AddPlanCubit extends Cubit<AddPlanState> {
       emit(Error(message: StringManager.emptyNameField));
       return;
     } else {
-      if (_name!.length <= 3) {
+      if (_name.length <= 3) {
         emit(Error(message: StringManager.shortExerciseName));
         return;
       }

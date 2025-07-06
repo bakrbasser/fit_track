@@ -43,6 +43,6 @@ class UpdatePlanCubit extends Cubit<UpdatePlanState> {
       isActivated: plan.isActivated,
     );
 
-    repo.updateTrainingPlan(trainingPlan: updatedPlan);
+    await repo.updateTrainingPlan(trainingPlan: updatedPlan);
   }
 }
