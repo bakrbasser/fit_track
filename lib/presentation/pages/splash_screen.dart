@@ -2,7 +2,9 @@ import 'package:fit_track/core/presentation/resources/assets_manager.dart';
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
 import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
+import 'package:fit_track/presentation/cubits/initialization/initialization_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,8 +16,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => context.read<InitializationCubit>().initialize(),
+    );
   }
 
   @override
