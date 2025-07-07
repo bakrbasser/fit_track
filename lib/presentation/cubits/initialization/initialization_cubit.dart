@@ -11,7 +11,7 @@ class InitializationCubit extends Cubit<InitializationState> {
 
   final planRepo = TrainingPlanRepositoryImpl();
   final dayRepo = TrainingDayRepositoryImpl();
-  final exerciseRepo = ExercisesRepositoryImpl();
+  final exerciseRepo = ExercisesRepositoryImpl.instance;
 
   Future<void> initialize() async {
     emit(Initializing());

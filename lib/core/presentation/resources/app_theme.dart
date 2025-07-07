@@ -12,5 +12,16 @@ class AppTheme {
       foregroundColor: Colors.white,
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.white),
+    inputDecorationTheme: InputDecorationTheme(
+      hintStyle: FontsManager.lexendRegular(color: ColorsManager.offWhite),
+
+      contentPadding: EdgeInsets.symmetric(horizontal: 10),
+      filled: true,
+      fillColor: ColorsManager.darkGreen,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: ColorsManager.borderGreen),
+      ),
+    ),
   );
 }

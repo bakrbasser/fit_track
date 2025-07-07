@@ -3,6 +3,7 @@ import 'package:fit_track/core/presentation/resources/string_manager.dart';
 import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:fit_track/domain/entities/exercise.dart';
 import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
+import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/exercise_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +34,7 @@ class ExercisesScreen extends StatelessWidget {
 }
 
 class _ExercisesList extends StatelessWidget {
-  const _ExercisesList({super.key, required this.exercises});
+  const _ExercisesList({required this.exercises});
 
   final List<Exercise> exercises;
 
@@ -51,16 +52,26 @@ class _ExercisesList extends StatelessWidget {
 }
 
 class _AddExerciseButton extends StatelessWidget {
-  const _AddExerciseButton({super.key});
+  const _AddExerciseButton();
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(onPressed: () {}, icon: Icon(Icons.add, size: 30));
+    return IconButton(
+      onPressed: () async {
+        final cubit = context.read<ExercisesListCubit>();
+        final isAdded =
+            await Navigator.pushNamed(context, Routes.addExercises) as bool;
+        if (isAdded) {
+          cubit.loadList();
+        }
+      },
+      icon: Icon(Icons.add, size: 30),
+    );
   }
 }
 
 class _NoExercises extends StatelessWidget {
-  const _NoExercises({super.key});
+  const _NoExercises();
 
   @override
   Widget build(BuildContext context) {

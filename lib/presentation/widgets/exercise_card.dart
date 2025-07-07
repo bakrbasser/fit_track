@@ -1,6 +1,7 @@
 import 'package:fit_track/core/presentation/resources/assets_manager.dart';
 import 'package:fit_track/core/presentation/resources/colors_manager.dart';
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
+import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:fit_track/domain/entities/exercise.dart';
 import 'package:flutter/material.dart';
 
@@ -29,11 +30,15 @@ class ExerciseCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(exercise.name, style: FontsManager.lexendMedium(size: 22)),
-            Text(
-              exercise.instructions ?? 'No description',
-              style: FontsManager.lexendMedium(
-                color: ColorsManager.textGrey,
-                size: 16,
+            SizedBox(
+              width: ScreenSizeHelper.width_P(context, 0.65),
+              child: Text(
+                exercise.instructions ?? 'No description',
+                style: FontsManager.lexendMedium(
+                  color: ColorsManager.textGrey,
+                  size: 16,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
