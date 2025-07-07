@@ -8,8 +8,19 @@ import 'package:fit_track/presentation/widgets/exercise_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ExercisesScreen extends StatelessWidget {
+class ExercisesScreen extends StatefulWidget {
   const ExercisesScreen({super.key});
+
+  @override
+  State<ExercisesScreen> createState() => _ExercisesScreenState();
+}
+
+class _ExercisesScreenState extends State<ExercisesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ExercisesListCubit>().loadList();
+  }
 
   @override
   Widget build(BuildContext context) {

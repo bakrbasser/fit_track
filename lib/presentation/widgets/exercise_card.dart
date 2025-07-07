@@ -22,7 +22,7 @@ class ExerciseCard extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Image.asset(AssetsManager.Dumbbell, scale: 0.7),
+            child: Image.asset(AssetsManager.dumbbell, scale: 0.7),
           ),
         ),
         SizedBox(width: 30),

@@ -23,5 +23,11 @@ class AppTheme {
         borderSide: BorderSide(color: ColorsManager.borderGreen),
       ),
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: ColorsManager.darkGreen,
+      labelTextStyle: WidgetStatePropertyAll(
+        FontsManager.lexendRegular(size: 14),
+      ),
+    ),
   );
 }

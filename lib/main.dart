@@ -7,7 +7,6 @@ void main(List<String> args) {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RoutesGenerator.getRoute,
-      initialRoute: Routes.exercisesList,
       theme: AppTheme.darkTheme,
     ),
   );

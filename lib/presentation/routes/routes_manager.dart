@@ -1,14 +1,17 @@
 import 'package:fit_track/presentation/cubits/exercises/add/add_exercise_cubit.dart';
 import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/initialization/initialization_cubit.dart';
+import 'package:fit_track/presentation/cubits/pages_navigator/pages_navigator_cubit.dart';
 import 'package:fit_track/presentation/pages/exercises/add_exercise.dart';
 import 'package:fit_track/presentation/pages/exercises/exercises_screen.dart';
+import 'package:fit_track/presentation/pages/main_page/main_page.dart';
 import 'package:fit_track/presentation/pages/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Routes {
   static const String splashScreen = '/';
+  static const String main = '/main';
   static const String exercisesList = '/exercisesList';
   static const String addExercises = '/addExercise';
 }
@@ -22,6 +25,14 @@ class RoutesGenerator {
               (context) => BlocProvider(
                 create: (context) => InitializationCubit(),
                 child: SplashScreen(),
+              ),
+        );
+      case Routes.main:
+        return MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create: (context) => PagesNavigatorCubit(),
+                child: MainPage(),
               ),
         );
       case Routes.exercisesList:
