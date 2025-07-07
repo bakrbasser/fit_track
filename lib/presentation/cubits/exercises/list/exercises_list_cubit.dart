@@ -7,7 +7,7 @@ part 'exercises_list_state.dart';
 
 class ExercisesListCubit extends Cubit<ExercisesListState> {
   ExercisesListCubit() : super(ExercisesInitial());
-  final exercisesRepo = ExercisesRepositoryImpl();
+  final exercisesRepo = ExercisesRepositoryImpl.instance;
   void loadList() {
     emit(Loading());
 

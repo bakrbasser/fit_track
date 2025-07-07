@@ -7,7 +7,7 @@ class UpdateExerciseCubit extends Cubit<UpdateExerciseState> {
   UpdateExerciseCubit({required this.exercise})
     : super(UpdateExerciseInitial());
 
-  final exercisesRepo = ExercisesRepositoryImpl();
+  final exercisesRepo = ExercisesRepositoryImpl.instance;
   final Exercise exercise;
   String _name = '';
   String? _instructions;

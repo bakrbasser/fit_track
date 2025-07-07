@@ -5,6 +5,9 @@ import 'package:fit_track/domain/entities/exercise.dart';
 import '../../domain/repositories/exercises_repository.dart';
 
 class ExercisesRepositoryImpl implements ExercisesRepository {
+  ExercisesRepositoryImpl._priv();
+  static ExercisesRepositoryImpl instance = ExercisesRepositoryImpl._priv();
+
   final ExerciseDao _dao = ExerciseDao.instance;
   List<Exercise> _exercises = [];
 

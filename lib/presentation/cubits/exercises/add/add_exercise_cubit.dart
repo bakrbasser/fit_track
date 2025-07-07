@@ -6,7 +6,7 @@ import 'package:fit_track/presentation/cubits/exercises/add/add_exercise_state.d
 
 class AddExerciseCubit extends Cubit<AddExerciseState> {
   AddExerciseCubit() : super(AddExerciseInitial());
-  final exercisesRepo = ExercisesRepositoryImpl();
+  final exercisesRepo = ExercisesRepositoryImpl.instance;
 
   String? _name;
   String? _instructions;
