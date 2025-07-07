@@ -5,7 +5,8 @@ import 'package:fit_track/domain/repositories/goal_repository.dart';
 
 class GoalRepositoryImpl implements GoalRepository {
   final _dao = GoalDao.instance;
-
+  GoalRepositoryImpl._priv();
+  static GoalRepositoryImpl instance = GoalRepositoryImpl._priv();
   List<Goal> _goals = [];
   List<Goal> get goals => _goals;
 

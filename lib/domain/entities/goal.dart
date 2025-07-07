@@ -1,5 +1,5 @@
 class Goal {
-  final int id;
+  final int? id;
   final int exerciseId;
   final int? weight;
   final int? reps;
