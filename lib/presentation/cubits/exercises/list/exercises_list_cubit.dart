@@ -8,6 +8,9 @@ part 'exercises_list_state.dart';
 class ExercisesListCubit extends Cubit<ExercisesListState> {
   ExercisesListCubit() : super(ExercisesInitial());
   final exercisesRepo = ExercisesRepositoryImpl.instance;
+
+  List<Exercise> get exercises => exercisesRepo.exercises;
+
   void loadList() {
     emit(Loading());
 
@@ -15,7 +18,10 @@ class ExercisesListCubit extends Cubit<ExercisesListState> {
     if (exercises.isEmpty) {
       emit(EmptyList());
     } else {
-      emit(FullList(exercises: exercises));
+      emit(FullList());
     }
   }
+
+  Exercise exerciseById(int id) =>
+      exercisesRepo.exercises.singleWhere((element) => element.id == id);
 }

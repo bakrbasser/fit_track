@@ -1,7 +1,8 @@
 import 'package:fit_track/core/presentation/resources/assets_manager.dart';
-import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
+import 'package:fit_track/presentation/cubits/goals/list/goals_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/pages_navigator/pages_navigator_cubit.dart';
 import 'package:fit_track/presentation/pages/exercises/exercises_screen.dart';
+import 'package:fit_track/presentation/pages/goals/goals_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,16 +23,16 @@ class MainPage extends StatelessWidget {
 
           // }
           if (state is NavigatingExercises) {
-            return BlocProvider(
-              create: (context) => ExercisesListCubit(),
-              child: ExercisesScreen(),
-            );
+            return ExercisesScreen();
           }
           // if (state is NavigatingPlans) {
           // }
-          // if (state is NavigatingGoals) {
-          // }
-          else {
+          if (state is NavigatingGoals) {
+            return BlocProvider(
+              create: (context) => GoalsListCubit(),
+              child: GoalsScreen(),
+            );
+          } else {
             return Container();
           }
         },

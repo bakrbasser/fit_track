@@ -9,8 +9,4 @@ final class Loading extends PlansListState {}
 
 final class EmptyList extends PlansListState {}
 
-final class FullList extends PlansListState {
-  final List<TrainingPlan> plans;
-
-  FullList({required this.plans});
-}
+final class FullList extends PlansListState {}

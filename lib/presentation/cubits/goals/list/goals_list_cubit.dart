@@ -8,6 +8,7 @@ part 'goals_list_state.dart';
 class GoalsListCubit extends Cubit<GoalsListState> {
   GoalsListCubit() : super(GoalsListInitial());
   final repo = GoalRepositoryImpl.instance;
+  List<Goal> get goals => repo.goals;
 
   void loadList() {
     emit(Loading());
@@ -16,7 +17,7 @@ class GoalsListCubit extends Cubit<GoalsListState> {
     if (goals.isEmpty) {
       emit(EmptyList());
     } else {
-      emit(FullList(goals: goals));
+      emit(FullList());
     }
   }
 }

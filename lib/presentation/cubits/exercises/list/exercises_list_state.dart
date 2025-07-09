@@ -9,8 +9,4 @@ final class Loading extends ExercisesListState {}
 
 final class EmptyList extends ExercisesListState {}
 
-final class FullList extends ExercisesListState {
-  final List<Exercise> exercises;
-
-  FullList({required this.exercises});
-}
+final class FullList extends ExercisesListState {}

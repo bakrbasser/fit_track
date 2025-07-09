@@ -30,19 +30,16 @@ class RoutesGenerator {
       case Routes.main:
         return MaterialPageRoute(
           builder:
-              (context) => BlocProvider(
-                create: (context) => PagesNavigatorCubit(),
+              (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => PagesNavigatorCubit()),
+                  BlocProvider(create: (context) => ExercisesListCubit()),
+                ],
                 child: MainPage(),
               ),
         );
       case Routes.exercisesList:
-        return MaterialPageRoute(
-          builder:
-              (context) => BlocProvider(
-                create: (context) => ExercisesListCubit(),
-                child: ExercisesScreen(),
-              ),
-        );
+        return MaterialPageRoute(builder: (context) => ExercisesScreen());
       case Routes.addExercises:
         return MaterialPageRoute(
           builder:

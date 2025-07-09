@@ -1,10 +1,9 @@
-import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
-import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:fit_track/domain/entities/exercise.dart';
 import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
-import 'package:fit_track/presentation/widgets/exercise_card.dart';
+import 'package:fit_track/presentation/widgets/cards.dart';
+import 'package:fit_track/presentation/widgets/general.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,10 +32,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           } else if (state is FullList) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: _ExercisesList(exercises: state.exercises),
+              child: _ExercisesList(),
             );
           } else {
-            return _NoExercises();
+            return NoElements(message: StringManager.noExerciseFound);
           }
         },
       ),
@@ -44,10 +43,21 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   }
 }
 
-class _ExercisesList extends StatelessWidget {
-  const _ExercisesList({required this.exercises});
+class _ExercisesList extends StatefulWidget {
+  const _ExercisesList();
 
-  final List<Exercise> exercises;
+  @override
+  State<_ExercisesList> createState() => _ExercisesListState();
+}
+
+class _ExercisesListState extends State<_ExercisesList> {
+  late List<Exercise> exercises;
+
+  @override
+  void initState() {
+    super.initState();
+    exercises = context.read<ExercisesListCubit>().exercises;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,22 +87,6 @@ class _AddExerciseButton extends StatelessWidget {
         }
       },
       icon: Icon(Icons.add, size: 30),
-    );
-  }
-}
-
-class _NoExercises extends StatelessWidget {
-  const _NoExercises();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: ScreenSizeHelper.height_P(context, 0.2)),
-      child: Text(
-        StringManager.noExerciseFound,
-        style: FontsManager.lexendMedium(size: 22),
-        textAlign: TextAlign.center,
-      ),
     );
   }
 }

@@ -17,7 +17,7 @@ class PlansListCubit extends Cubit<PlansListState> {
     if (plans.isEmpty) {
       emit(EmptyList());
     } else {
-      emit(FullList(plans: plans));
+      emit(FullList());
     }
   }
 }

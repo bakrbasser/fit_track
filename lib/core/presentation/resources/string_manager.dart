@@ -14,4 +14,5 @@ class StringManager {
       'You have not selected an exercise for the goal';
   static String get noSelectedWeight => 'You need to enter a weight';
   static String get noSelectedReps => 'You need to enter how many reps';
+  static String get noGoalsFound => 'There are no goals yet please add some';
 }
