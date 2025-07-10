@@ -1,5 +1,4 @@
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
-import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:flutter/material.dart';
 
 class NoElements extends StatelessWidget {
@@ -7,8 +6,8 @@ class NoElements extends StatelessWidget {
   final String message;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: ScreenSizeHelper.height_P(context, 0.2)),
+    return Align(
+      alignment: Alignment(0, -0.5),
       child: Text(
         message,
         style: FontsManager.lexendMedium(size: 22),

@@ -1,6 +1,7 @@
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
 import 'package:fit_track/domain/entities/goal.dart';
 import 'package:fit_track/presentation/cubits/goals/list/goals_list_cubit.dart';
+import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
 import 'package:fit_track/presentation/widgets/general.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +18,23 @@ class _GoalsScreenState extends State<GoalsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<GoalsListCubit>().loadList();
+    context.read<GoalsListCubit>().loadUnAchievedList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Goals'), actions: [_AddGoalButton()]),
+      appBar: AppBar(
+        title: Text('Goals'),
+        leading: ViewAchievedGoals(),
+        actions: [_AddGoalButton()],
+      ),
       body: BlocBuilder<GoalsListCubit, GoalsListState>(
         builder: (context, state) {
           if (state is Loading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is FullList) {
-            return _GoalsList();
+            return GoalsList(goals: state.goals);
           } else {
             return NoElements(message: StringManager.noGoalsFound);
           }
@@ -39,25 +44,15 @@ class _GoalsScreenState extends State<GoalsScreen> {
   }
 }
 
-class _GoalsList extends StatefulWidget {
-  const _GoalsList();
+class GoalsList extends StatelessWidget {
+  const GoalsList({super.key, required this.goals});
 
-  @override
-  State<_GoalsList> createState() => _GoalsListState();
-}
-
-class _GoalsListState extends State<_GoalsList> {
-  late final List<Goal> goals;
-
-  @override
-  void initState() {
-    super.initState();
-    goals = context.read<GoalsListCubit>().goals;
-  }
+  final List<Goal> goals;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: goals.length,
       itemBuilder:
           (context, index) => Padding(
@@ -75,14 +70,28 @@ class _AddGoalButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async {
-        // final cubit = context.read<GoalsListCubit>();
-        // final isAdded =
-        //     await Navigator.pushNamed(context, Routes.addGoal) as bool;
-        // if (isAdded) {
-        //   cubit.loadList();
-        // }
+        final cubit = context.read<GoalsListCubit>();
+        final isAdded =
+            await Navigator.pushNamed(context, Routes.addGoal) as bool;
+        if (isAdded) {
+          cubit.loadUnAchievedList();
+        }
       },
       icon: Icon(Icons.add, size: 30),
+    );
+  }
+}
+
+class ViewAchievedGoals extends StatelessWidget {
+  const ViewAchievedGoals({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        Navigator.pushNamed(context, Routes.achievedGoals);
+      },
+      icon: Icon(Icons.emoji_events),
     );
   }
 }

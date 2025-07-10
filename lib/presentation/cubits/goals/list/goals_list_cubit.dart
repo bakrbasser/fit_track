@@ -8,16 +8,30 @@ part 'goals_list_state.dart';
 class GoalsListCubit extends Cubit<GoalsListState> {
   GoalsListCubit() : super(GoalsListInitial());
   final repo = GoalRepositoryImpl.instance;
-  List<Goal> get goals => repo.goals;
+  List<Goal> _unAchievedGoals = [];
+  List<Goal> _achievedGoals = [];
 
-  void loadList() {
+  List<Goal> get unAchievedGoals => _unAchievedGoals;
+  List<Goal> get achievedGoals => _achievedGoals;
+
+  void loadUnAchievedList() {
     emit(Loading());
-
-    final goals = repo.goals;
-    if (goals.isEmpty) {
+    _unAchievedGoals =
+        repo.goals.where((element) => !element.isAchieved).toList();
+    if (_unAchievedGoals.isEmpty) {
       emit(EmptyList());
     } else {
-      emit(FullList());
+      emit(FullList(goals: _unAchievedGoals));
+    }
+  }
+
+  void loadAchievedList() {
+    emit(Loading());
+    _achievedGoals = repo.goals.where((element) => element.isAchieved).toList();
+    if (_achievedGoals.isEmpty) {
+      emit(EmptyList());
+    } else {
+      emit(FullList(goals: _achievedGoals));
     }
   }
 }

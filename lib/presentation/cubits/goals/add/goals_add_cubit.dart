@@ -6,8 +6,8 @@ import 'package:meta/meta.dart';
 
 part 'goals_add_state.dart';
 
-class GoalsAddCubit extends Cubit<GoalsAddState> {
-  GoalsAddCubit() : super(GoalsAddInitial());
+class AddGoalCubit extends Cubit<GoalsAddState> {
+  AddGoalCubit() : super(GoalsAddInitial());
 
   final repo = GoalRepositoryImpl.instance;
 

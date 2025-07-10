@@ -6,6 +6,8 @@ class StringManager {
   //Add Exercise Screen
   static String get emptyNameField =>
       'The Name Field Is Empty Please Insert A Name';
+  static String get emptyExerciseField =>
+      'The Exercise\'s Field Can\'t Be Left Empty ';
   static String get shortExerciseName =>
       'The Name Cant\'t be Less Than 3 Characters';
   static String get noExerciseFound =>
@@ -15,4 +17,5 @@ class StringManager {
   static String get noSelectedWeight => 'You need to enter a weight';
   static String get noSelectedReps => 'You need to enter how many reps';
   static String get noGoalsFound => 'There are no goals yet please add some';
+  static String get noAchievedGoalsFound => 'There are no achieved goals yet';
 }

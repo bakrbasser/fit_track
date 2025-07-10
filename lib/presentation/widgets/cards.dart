@@ -81,7 +81,7 @@ class GoalCard extends StatelessWidget {
     return IconCard(
       icon: Image.asset(AssetsManager.dumbbell, scale: 0.7),
       title: exercise.name,
-      description: 'Target ${goal.weight}kg ${goal.reps} times',
+      description: 'Target ${goal.weight} kg ${goal.reps} times',
     );
   }
 }
