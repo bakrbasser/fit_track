@@ -9,7 +9,7 @@ part 'add_plan_state.dart';
 class AddPlanCubit extends Cubit<AddPlanState> {
   AddPlanCubit() : super(AddPlanInitial());
 
-  final repo = TrainingPlanRepositoryImpl();
+  final repo = TrainingPlanRepositoryImpl.instance;
 
   String _name = '';
   String? _description;

@@ -7,8 +7,10 @@ import 'package:fit_track/domain/entities/training_plan_training_day.dart';
 import 'package:fit_track/domain/repositories/training_plan_repository.dart';
 
 class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
+  TrainingPlanRepositoryImpl._priv();
+  static TrainingPlanRepositoryImpl instance =
+      TrainingPlanRepositoryImpl._priv();
   final TrainingPlanDAO _dao = TrainingPlanDAO.instance;
-
   List<TrainingPlan> _trainingPlans = [];
   List<TrainingPlan> get trainingPlans => _trainingPlans;
 

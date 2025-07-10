@@ -8,7 +8,7 @@ part 'update_plan_state.dart';
 class UpdatePlanCubit extends Cubit<UpdatePlanState> {
   UpdatePlanCubit({required this.plan}) : super(UpdatePlanInitial());
 
-  final repo = TrainingPlanRepositoryImpl();
+  final repo = TrainingPlanRepositoryImpl.instance;
   final TrainingPlan plan;
 
   String _name = '';

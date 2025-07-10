@@ -10,7 +10,7 @@ part 'initialization_state.dart';
 class InitializationCubit extends Cubit<InitializationState> {
   InitializationCubit() : super(InitializationInitial());
 
-  final planRepo = TrainingPlanRepositoryImpl();
+  final planRepo = TrainingPlanRepositoryImpl.instance;
   final dayRepo = TrainingDayRepositoryImpl();
   final exerciseRepo = ExercisesRepositoryImpl.instance;
   final goalRepo = GoalRepositoryImpl.instance;

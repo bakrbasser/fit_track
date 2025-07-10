@@ -7,7 +7,7 @@ part 'plans_list_state.dart';
 class PlansListCubit extends Cubit<PlansListState> {
   PlansListCubit() : super(PlansListInitial());
 
-  final repo = TrainingPlanRepositoryImpl();
+  final repo = TrainingPlanRepositoryImpl.instance;
 
   loadList() {
     emit(Loading());
