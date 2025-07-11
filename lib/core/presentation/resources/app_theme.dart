@@ -29,5 +29,10 @@ class AppTheme {
         FontsManager.lexendRegular(size: 14),
       ),
     ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: ColorsManager.black,
+      titleTextStyle: FontsManager.lexendBold(size: 22),
+      contentTextStyle: FontsManager.lexendRegular(size: 14),
+    ),
   );
 }

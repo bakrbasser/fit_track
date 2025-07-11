@@ -113,9 +113,62 @@ class PlanIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        //TODO : Apply on tap
+        Navigator.pop(context, icon);
       },
-      child: Image.asset(icon, color: Colors.white),
+      child: Container(
+        decoration: BoxDecoration(
+          color: ColorsManager.grey,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Image.asset(icon, color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
+
+class AddDayCard extends StatefulWidget {
+  const AddDayCard({super.key, required this.index});
+  final int index;
+
+  @override
+  State<AddDayCard> createState() => _AddDayCardState();
+}
+
+class _AddDayCardState extends State<AddDayCard> {
+  int trainingCount = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Day ${widget.index + 1}',
+              style: FontsManager.lexendMedium(size: 22),
+            ),
+            Text(
+              '$trainingCount exercises',
+              style: FontsManager.lexendMedium(
+                color: ColorsManager.textGrey,
+                size: 16,
+              ),
+            ),
+          ],
+        ),
+        Spacer(),
+        IconButton(
+          onPressed: () {
+            // TODO
+          },
+          icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
+        ),
+      ],
     );
   }
 }

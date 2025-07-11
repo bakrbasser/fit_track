@@ -73,7 +73,7 @@ class _NameField extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return StringManager.emptyNameField;
         } else if (value.length < 3) {
-          return StringManager.shortExerciseName;
+          return StringManager.shortNameField;
         }
         return null;
       },

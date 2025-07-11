@@ -69,6 +69,17 @@ flutter:
   assets:
     - assets/images/Logo.png
     - assets/images/dumbbell.png
+    - assets/icons/bike.png
+    - assets/icons/rope.png   
+    - assets/icons/pushUp.png
+    - assets/icons/mill.png
+    - assets/icons/pullUps.png
+    - assets/icons/body.png
+    - assets/icons/exercise.png
+    - assets/icons/dumbbell.png
+    - assets/icons/gym.png
+    - assets/icons/heart.png
+    - assets/icons/power.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

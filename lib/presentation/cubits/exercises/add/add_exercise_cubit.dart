@@ -23,7 +23,7 @@ class AddExerciseCubit extends Cubit<AddExerciseState> {
       return;
     } else {
       if (_name!.length <= 3) {
-        emit(Error(message: StringManager.shortExerciseName));
+        emit(Error(message: StringManager.shortNameField));
         return;
       }
     }

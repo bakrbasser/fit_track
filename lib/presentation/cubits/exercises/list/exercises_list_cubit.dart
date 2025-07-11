@@ -18,7 +18,7 @@ class ExercisesListCubit extends Cubit<ExercisesListState> {
     if (exercises.isEmpty) {
       emit(EmptyList());
     } else {
-      emit(FullList());
+      emit(FullList(exercises: exercises));
     }
   }
 

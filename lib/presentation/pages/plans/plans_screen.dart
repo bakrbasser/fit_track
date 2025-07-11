@@ -1,41 +1,42 @@
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
-import 'package:fit_track/domain/entities/exercise.dart';
-import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
+import 'package:fit_track/domain/entities/training_plan.dart';
+import 'package:fit_track/presentation/cubits/plans/list/plans_list_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
+import 'package:fit_track/presentation/widgets/dialogs.dart';
 import 'package:fit_track/presentation/widgets/general.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ExercisesScreen extends StatefulWidget {
-  const ExercisesScreen({super.key});
+class PlansScreen extends StatefulWidget {
+  const PlansScreen({super.key});
 
   @override
-  State<ExercisesScreen> createState() => _ExercisesScreenState();
+  State<PlansScreen> createState() => _PlansScreenState();
 }
 
-class _ExercisesScreenState extends State<ExercisesScreen> {
+class _PlansScreenState extends State<PlansScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ExercisesListCubit>().loadList();
+    context.read<PlansListCubit>().loadList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Exercises'), actions: [AddExerciseButton()]),
-      body: BlocBuilder<ExercisesListCubit, ExercisesListState>(
+      appBar: AppBar(title: Text('Training Plans'), actions: [AddPlanButton()]),
+      body: BlocBuilder<PlansListCubit, PlansListState>(
         builder: (context, state) {
           if (state is Loading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is FullList) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: ExercisesList(state.exercises),
+              child: PlansList(state.plans),
             );
           } else {
-            return NoElements(message: StringManager.noExerciseFound);
+            return NoElements(message: StringManager.noPlanFound);
           }
         },
       ),
@@ -43,37 +44,34 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   }
 }
 
-class ExercisesList extends StatelessWidget {
-  const ExercisesList(this.exercises, {super.key});
+class PlansList extends StatelessWidget {
+  const PlansList(this.plans, {super.key});
 
-  final List<Exercise> exercises;
+  final List<TrainingPlan> plans;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: exercises.length,
+      itemCount: plans.length,
       itemBuilder:
           (context, index) => Padding(
             padding: EdgeInsets.only(bottom: 30),
-            child: ExerciseCard(exercise: exercises[index]),
+            child: PlanCard(plan: plans[index]),
           ),
     );
   }
 }
 
-class AddExerciseButton extends StatelessWidget {
-  const AddExerciseButton({super.key});
+class AddPlanButton extends StatelessWidget {
+  const AddPlanButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async {
-        final cubit = context.read<ExercisesListCubit>();
-        final isAdded =
-            await Navigator.pushNamed(context, Routes.addExercises) as bool;
-        if (isAdded) {
-          cubit.loadList();
-        }
+        final nav = Navigator.of(context);
+        int? howManyDays = await showDaysDialog(context);
+        nav.pushNamed(Routes.addPlan, arguments: howManyDays);
       },
       icon: Icon(Icons.add, size: 30),
     );

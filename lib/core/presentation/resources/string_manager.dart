@@ -8,10 +8,12 @@ class StringManager {
       'The Name Field Is Empty Please Insert A Name';
   static String get emptyExerciseField =>
       'The Exercise\'s Field Can\'t Be Left Empty ';
-  static String get shortExerciseName =>
+  static String get shortNameField =>
       'The Name Cant\'t be Less Than 3 Characters';
   static String get noExerciseFound =>
       'There are no exercises yet please add some';
+  static String get noPlanFound =>
+      'There are no Training Plans yet please add some';
   static String get noSelectedExercise =>
       'You have not selected an exercise for the goal';
   static String get noSelectedWeight => 'You need to enter a weight';
