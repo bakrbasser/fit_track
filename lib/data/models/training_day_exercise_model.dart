@@ -1,7 +1,7 @@
 import '../../domain/entities/training_day_exercise.dart';
 
 class TrainingDayExerciseModel {
-  final int trainingDayId;
+  final int? trainingDayId;
   final int exerciseId;
   final int sets;
   final int reps;
