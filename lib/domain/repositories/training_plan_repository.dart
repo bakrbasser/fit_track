@@ -10,10 +10,11 @@ abstract class TrainingPlanRepository {
   Future<List<TrainingDay>> fetchPlanTrainingDays({
     required int trainingPlanID,
   });
-  Future linkDayToPlan({
-    required TrainingPlanTrainingDay trainingPlanTrainingDay,
-  });
+  Future linkDaysToPlan({required List<int> daysID});
   Future removeLinkDayToPlan({
     required TrainingPlanTrainingDay trainingPlanTrainingDay,
   });
+
+  Future<void> activatePlan({required TrainingPlan plan});
+  Future<void> deactivatePlan();
 }

@@ -8,7 +8,7 @@ part 'update_day_state.dart';
 class UpdateDayCubit extends Cubit<UpdateDayState> {
   UpdateDayCubit({required this.day}) : super(UpdateDayInitial());
 
-  final repo = TrainingDayRepositoryImpl();
+  final repo = TrainingDayRepositoryImpl.instance;
   final TrainingDay day;
 
   String _name = '';

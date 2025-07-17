@@ -37,7 +37,7 @@ class AddExercise extends StatelessWidget {
               TextFormField(
                 decoration: InputDecoration(contentPadding: EdgeInsets.all(12)),
                 style: FontsManager.lexendRegular(),
-                maxLines: 5,
+                maxLines: 4,
                 onChanged: (value) {
                   context.read<AddExerciseCubit>().instructions = value;
                 },

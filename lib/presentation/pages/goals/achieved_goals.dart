@@ -1,6 +1,6 @@
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
 import 'package:fit_track/presentation/cubits/goals/list/goals_list_cubit.dart';
-import 'package:fit_track/presentation/pages/goals/goals_screen.dart';
+import 'package:fit_track/presentation/widgets/cards.dart';
 import 'package:fit_track/presentation/widgets/general.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +28,13 @@ class _AchievedGoalsState extends State<AchievedGoals> {
           if (state is Loading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is FullList) {
-            return GoalsList(goals: state.goals);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CardList(
+                items: state.goals,
+                builder: (item) => GoalCard(goal: item),
+              ),
+            );
           } else {
             return NoElements(message: StringManager.noAchievedGoalsFound);
           }

@@ -1,11 +1,11 @@
 import '../../domain/entities/training_plan.dart';
 
 class TrainingPlanModel {
-  final int id;
+  final int? id;
   final String name;
   final String? description;
   final String? icon;
-  final bool isActivated;
+  bool isActivated;
 
   TrainingPlanModel({
     required this.id,

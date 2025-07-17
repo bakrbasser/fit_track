@@ -1,9 +1,9 @@
 class TrainingPlan {
-  final int id;
+  final int? id;
   final String name;
   final String? description;
   final String? icon;
-  final bool isActivated;
+  bool isActivated;
 
   TrainingPlan({
     required this.id,

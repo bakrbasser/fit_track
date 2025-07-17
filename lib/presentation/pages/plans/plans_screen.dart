@@ -1,5 +1,4 @@
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
-import 'package:fit_track/domain/entities/training_plan.dart';
 import 'package:fit_track/presentation/cubits/plans/list/plans_list_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
@@ -33,31 +32,16 @@ class _PlansScreenState extends State<PlansScreen> {
           } else if (state is FullList) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: PlansList(state.plans),
+              child: CardList(
+                items: state.plans,
+                builder: (item) => PlanCard(plan: item),
+              ),
             );
           } else {
             return NoElements(message: StringManager.noPlanFound);
           }
         },
       ),
-    );
-  }
-}
-
-class PlansList extends StatelessWidget {
-  const PlansList(this.plans, {super.key});
-
-  final List<TrainingPlan> plans;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: plans.length,
-      itemBuilder:
-          (context, index) => Padding(
-            padding: EdgeInsets.only(bottom: 30),
-            child: PlanCard(plan: plans[index]),
-          ),
     );
   }
 }
@@ -70,8 +54,14 @@ class AddPlanButton extends StatelessWidget {
     return IconButton(
       onPressed: () async {
         final nav = Navigator.of(context);
+        final cub = context.read<PlansListCubit>();
         int? howManyDays = await showDaysDialog(context);
-        nav.pushNamed(Routes.addPlan, arguments: howManyDays);
+
+        final isAdded =
+            await nav.pushNamed(Routes.addPlan, arguments: howManyDays) as bool;
+        if (isAdded) {
+          cub.loadList();
+        }
       },
       icon: Icon(Icons.add, size: 30),
     );

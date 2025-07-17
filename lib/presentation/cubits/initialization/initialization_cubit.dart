@@ -11,7 +11,7 @@ class InitializationCubit extends Cubit<InitializationState> {
   InitializationCubit() : super(InitializationInitial());
 
   final planRepo = TrainingPlanRepositoryImpl.instance;
-  final dayRepo = TrainingDayRepositoryImpl();
+  final dayRepo = TrainingDayRepositoryImpl.instance;
   final exerciseRepo = ExercisesRepositoryImpl.instance;
   final goalRepo = GoalRepositoryImpl.instance;
 

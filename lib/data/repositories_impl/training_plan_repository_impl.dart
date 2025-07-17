@@ -13,6 +13,7 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   final TrainingPlanDAO _dao = TrainingPlanDAO.instance;
   List<TrainingPlan> _trainingPlans = [];
   List<TrainingPlan> get trainingPlans => _trainingPlans;
+  TrainingPlan? activePlan;
 
   @override
   Future fetchTrainingPlans() async {
@@ -21,6 +22,12 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
       plans.length,
       (index) => plans[index].toEntity(),
     );
+    for (var i = 0; i < _trainingPlans.length; i++) {
+      if (_trainingPlans[i].isActivated) {
+        activePlan = _trainingPlans[i];
+        break;
+      }
+    }
   }
 
   @override
@@ -66,13 +73,14 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   }
 
   @override
-  Future linkDayToPlan({
-    required TrainingPlanTrainingDay trainingPlanTrainingDay,
-  }) async {
-    final model = TrainingPlanTrainingDayModel.fromEntity(
-      trainingPlanTrainingDay,
-    );
-    await _dao.linkDayToPlan(model: model);
+  Future linkDaysToPlan({required List<int> daysID}) async {
+    for (var i = 0; i < daysID.length; i++) {
+      final model = TrainingPlanTrainingDayModel(
+        trainingPlanId: _trainingPlans.last.id!,
+        trainingDayId: daysID[i],
+      );
+      await _dao.linkDayToPlan(model: model);
+    }
   }
 
   @override
@@ -83,5 +91,25 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
       trainingPlanTrainingDay,
     );
     await _dao.removeLinkDayToPlan(model: model);
+  }
+
+  @override
+  Future<void> activatePlan({required TrainingPlan plan}) async {
+    final model = TrainingPlanModel.fromEntity(plan);
+    if (activePlan != null) {
+      await deactivatePlan();
+    }
+    await _dao.activatePlan(model: model);
+    activePlan = plan;
+    plan.isActivated = true;
+  }
+
+  @override
+  Future<void> deactivatePlan() async {
+    if (activePlan != null) {
+      final model = TrainingPlanModel.fromEntity(activePlan!);
+      await _dao.deactivatePlan(model: model);
+      activePlan!.isActivated = false;
+    }
   }
 }

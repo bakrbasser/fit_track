@@ -1,5 +1,4 @@
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
-import 'package:fit_track/domain/entities/goal.dart';
 import 'package:fit_track/presentation/cubits/goals/list/goals_list_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
@@ -34,31 +33,18 @@ class _GoalsScreenState extends State<GoalsScreen> {
           if (state is Loading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is FullList) {
-            return GoalsList(goals: state.goals);
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CardList(
+                items: state.goals,
+                builder: (item) => GoalCard(goal: item),
+              ),
+            );
           } else {
             return NoElements(message: StringManager.noGoalsFound);
           }
         },
       ),
-    );
-  }
-}
-
-class GoalsList extends StatelessWidget {
-  const GoalsList({super.key, required this.goals});
-
-  final List<Goal> goals;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: goals.length,
-      itemBuilder:
-          (context, index) => Padding(
-            padding: EdgeInsets.only(bottom: 30),
-            child: GoalCard(goal: goals[index]),
-          ),
     );
   }
 }

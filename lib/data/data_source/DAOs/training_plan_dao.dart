@@ -72,4 +72,24 @@ class TrainingPlanDAO {
       whereArgs: [model.trainingDayId, model.trainingPlanId],
     );
   }
+
+  Future<void> activatePlan({required TrainingPlanModel model}) async {
+    final db = await _db;
+    db.update(
+      TablesName.trainingPlans,
+      {'isActivated': true},
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
+  }
+
+  Future<void> deactivatePlan({required TrainingPlanModel model}) async {
+    final db = await _db;
+    db.update(
+      TablesName.trainingPlans,
+      {'isActivated': false},
+      where: 'id = ?',
+      whereArgs: [model.id],
+    );
+  }
 }
