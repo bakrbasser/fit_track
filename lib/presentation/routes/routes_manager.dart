@@ -1,3 +1,5 @@
+import 'package:fit_track/presentation/cubits/days/add/add_day_cubit.dart';
+import 'package:fit_track/presentation/cubits/days/list/days_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/exercises/add/add_exercise_cubit.dart';
 import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/goals/add/goals_add_cubit.dart';
@@ -5,6 +7,7 @@ import 'package:fit_track/presentation/cubits/goals/list/goals_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/initialization/initialization_cubit.dart';
 import 'package:fit_track/presentation/cubits/pages_navigator/pages_navigator_cubit.dart';
 import 'package:fit_track/presentation/cubits/plans/add/add_plan_cubit.dart';
+import 'package:fit_track/presentation/pages/days/add_day.dart';
 import 'package:fit_track/presentation/pages/exercises/add_exercise.dart';
 import 'package:fit_track/presentation/pages/exercises/exercises_screen.dart';
 import 'package:fit_track/presentation/pages/goals/achieved_goals.dart';
@@ -23,6 +26,7 @@ class Routes {
   static const String addGoal = '/addGoal';
   static const String achievedGoals = '/achievedGoal';
   static const String addPlan = '/addPlan';
+  static const String addDay = '/addDay';
 }
 
 class RoutesGenerator {
@@ -80,9 +84,23 @@ class RoutesGenerator {
         final args = settings.arguments as int;
         return MaterialPageRoute(
           builder:
-              (context) => BlocProvider(
-                create: (context) => AddPlanCubit(),
+              (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => AddPlanCubit()),
+                  BlocProvider(create: (context) => DaysListCubit()),
+                ],
                 child: AddPlan(numberOfDays: args),
+              ),
+        );
+      case Routes.addDay:
+        return MaterialPageRoute(
+          builder:
+              (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => AddDayCubit()),
+                  BlocProvider(create: (context) => ExercisesListCubit()),
+                ],
+                child: AddTrainingDay(),
               ),
         );
 

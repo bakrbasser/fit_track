@@ -34,5 +34,8 @@ class AppTheme {
       titleTextStyle: FontsManager.lexendBold(size: 22),
       contentTextStyle: FontsManager.lexendRegular(size: 14),
     ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(foregroundColor: Colors.white),
+    ),
   );
 }

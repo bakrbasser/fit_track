@@ -19,5 +19,7 @@ class StringManager {
   static String get noSelectedWeight => 'You need to enter a weight';
   static String get noSelectedReps => 'You need to enter how many reps';
   static String get noGoalsFound => 'There are no goals yet please add some';
+  static String get noTrainingDaysFound =>
+      'There are no training days yet please add some';
   static String get noAchievedGoalsFound => 'There are no achieved goals yet';
 }
