@@ -1,5 +1,4 @@
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
-import 'package:fit_track/domain/entities/exercise.dart';
 import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
@@ -18,6 +17,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   @override
   void initState() {
     super.initState();
+
     context.read<ExercisesListCubit>().loadList();
   }
 
@@ -32,31 +32,17 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           } else if (state is FullList) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: ExercisesList(state.exercises),
+              // child: ExercisesList(state.exercises),
+              child: CardList(
+                items: state.exercises,
+                builder: (item) => ExerciseCard(exercise: item),
+              ),
             );
           } else {
             return NoElements(message: StringManager.noExerciseFound);
           }
         },
       ),
-    );
-  }
-}
-
-class ExercisesList extends StatelessWidget {
-  const ExercisesList(this.exercises, {super.key});
-
-  final List<Exercise> exercises;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: exercises.length,
-      itemBuilder:
-          (context, index) => Padding(
-            padding: EdgeInsets.only(bottom: 30),
-            child: ExerciseCard(exercise: exercises[index]),
-          ),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:fit_track/core/presentation/resources/assets_manager.dart';
 import 'package:fit_track/core/presentation/resources/colors_manager.dart';
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
-import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:fit_track/core/presentation/utils/snack_bar_helper.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +44,7 @@ Future<int?> showDaysDialog(BuildContext context) async {
 
 Future<String?> showIconsDialog(BuildContext context) async {
   return showDialog<String>(
+    barrierDismissible: false,
     context: context,
     builder: (context) {
       return Dialog(

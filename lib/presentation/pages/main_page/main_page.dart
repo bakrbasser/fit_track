@@ -14,10 +14,6 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('FitTrack'),
-      //   actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
-      // ),
       bottomNavigationBar: MainNavigationBar(),
       body: BlocBuilder<PagesNavigatorCubit, PagesNavigatorState>(
         builder: (context, state) {
