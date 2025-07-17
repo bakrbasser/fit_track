@@ -31,6 +31,7 @@ class TrainingDayExerciseDao {
         where: 'trainingDay_id = ? and exercise_id = ?',
         whereArgs: [dayId, exerciseId],
       );
+      // ignore: empty_catches
     } catch (e) {}
   }
 }

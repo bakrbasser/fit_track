@@ -1,5 +1,5 @@
 class TrainingDay {
-  final int id;
+  final int? id;
   final String name;
   final String? description;
 

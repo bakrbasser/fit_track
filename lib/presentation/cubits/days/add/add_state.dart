@@ -1,17 +1,17 @@
-part of 'add_cubit.dart';
+part of 'add_day_cubit.dart';
 
 @immutable
-sealed class AddState {}
+sealed class AddDayState {}
 
-final class AddInitial extends AddState {}
+final class AddInitial extends AddDayState {}
 
-final class AddedDay extends AddState {
+final class AddedDay extends AddDayState {
   final TrainingDay day;
 
   AddedDay({required this.day});
 }
 
-final class Error extends AddState {
+final class Error extends AddDayState {
   final String message;
 
   Error({required this.message});

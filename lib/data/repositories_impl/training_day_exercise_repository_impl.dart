@@ -9,13 +9,13 @@ class TrainingDayExerciseRepositoryImpl
   static TrainingDayExerciseRepositoryImpl instance =
       TrainingDayExerciseRepositoryImpl._priv();
 
-  final dao = TrainingDayExerciseDao.dao;
+  final _dao = TrainingDayExerciseDao.dao;
 
   @override
   Future<int> addTrainingDayExercise({
     required TrainingDayExercise trainingDayExercise,
   }) async {
-    return dao.addTrainingDayExercise(
+    return _dao.addTrainingDayExercise(
       model: TrainingDayExerciseModel.fromEntity(trainingDayExercise),
     );
   }
@@ -25,6 +25,6 @@ class TrainingDayExerciseRepositoryImpl
     required int dayId,
     required int exerciseId,
   }) async {
-    dao.deleteTrainingDayExercise(dayId: dayId, exerciseId: exerciseId);
+    _dao.deleteTrainingDayExercise(dayId: dayId, exerciseId: exerciseId);
   }
 }

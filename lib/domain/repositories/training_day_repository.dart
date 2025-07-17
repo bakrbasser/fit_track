@@ -16,4 +16,5 @@ abstract class TrainingDayRepository {
   Future<List<DetailedExercise>> fetchTrainingDayExercises({
     required int trainingDayID,
   });
+  Future<int> dayExercisesCount(int dayId);
 }

@@ -1,5 +1,5 @@
 class TrainingDayExercise {
-  final int? trainingDayId;
+  int? trainingDayId;
   final int exerciseId;
   final int sets;
   final int reps;

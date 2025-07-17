@@ -83,4 +83,15 @@ class TrainingDayDao {
     );
     return query.map((e) => DetailedExerciseModel.fromJson(e)).toList();
   }
+
+  Future<int> dayExercisesCount(int dayId) async {
+    final db = await _db;
+    final query = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM ${TablesName.trainingDayExercise} WHERE trainingDay_id = ?',
+      [dayId],
+    );
+
+    final count = Sqflite.firstIntValue(query) ?? 0;
+    return count;
+  }
 }

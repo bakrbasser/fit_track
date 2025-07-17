@@ -7,16 +7,20 @@ part 'days_list_state.dart';
 
 class DaysListCubit extends Cubit<DaysListState> {
   DaysListCubit() : super(DaysListInitial());
-  final repo = TrainingDayRepositoryImpl();
+  final repo = TrainingDayRepositoryImpl.instance;
 
   loadList() {
     emit(Loading());
-
     final days = repo.trainingDays;
+
     if (days.isEmpty) {
       emit(EmptyList());
     } else {
       emit(FullList(days: days));
     }
+  }
+
+  Future<int> dayExercisesCount(int dayId) async {
+    return await repo.dayExercisesCount(dayId);
   }
 }
