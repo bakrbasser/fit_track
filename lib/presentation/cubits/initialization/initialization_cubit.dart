@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:fit_track/core/data_sources_consts.dart';
 import 'package:fit_track/data/repositories_impl/exercise_repository_impl.dart';
 import 'package:fit_track/data/repositories_impl/goal_repository_impl.dart';
 import 'package:fit_track/data/repositories_impl/training_day_repository_impl.dart';
 import 'package:fit_track/data/repositories_impl/training_plan_repository_impl.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:meta/meta.dart';
 
 part 'initialization_state.dart';
@@ -17,6 +19,9 @@ class InitializationCubit extends Cubit<InitializationState> {
 
   Future<void> initialize() async {
     emit(Initializing());
+    await Hive.initFlutter();
+    await Hive.openBox(BoxesNames.nextDay);
+
     await planRepo.fetchTrainingPlans();
     await dayRepo.fetchTrainingDays();
     await exerciseRepo.fetchAllExercises();

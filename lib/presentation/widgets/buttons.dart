@@ -3,7 +3,7 @@ import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
 import 'package:flutter/material.dart';
 
 class Buttons {
-  static saveButton({
+  static CostumeButton({
     Color backgroundColor = ColorsManager.green,
     Color foregroundColor = ColorsManager.black,
     required void Function() onPressed,

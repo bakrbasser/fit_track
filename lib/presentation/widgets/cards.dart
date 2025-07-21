@@ -103,6 +103,7 @@ class GoalCard extends StatelessWidget {
   }
 }
 
+// Add new day insider exercise Card
 class MultipleSelectionExerciseCard extends StatefulWidget {
   const MultipleSelectionExerciseCard({super.key, required this.exercise});
   final Exercise exercise;
@@ -149,12 +150,27 @@ class _MultipleStateSelectionExerciseCard
               width: 30,
               height: 40,
               child: TextField(
+                keyboardType: TextInputType.number,
+                style: FontsManager.lexendRegular(size: 14),
+
+                readOnly: !selected,
                 decoration: InputDecoration(
                   filled: false,
                   hintText: '$sets',
                   border: UnderlineInputBorder(),
                   contentPadding: EdgeInsets.zero,
                 ),
+                onChanged: (value) {
+                  if (value == '') {
+                    sets = 3;
+                  } else {
+                    sets = int.parse(value);
+                  }
+                  context.read<AddDayCubit>().updateSets(
+                    widget.exercise.id!,
+                    sets,
+                  );
+                },
               ),
             ),
           ],
@@ -169,12 +185,26 @@ class _MultipleStateSelectionExerciseCard
               width: 30,
               height: 40,
               child: TextField(
+                style: FontsManager.lexendRegular(size: 14),
+                keyboardType: TextInputType.number,
+                readOnly: !selected,
                 decoration: InputDecoration(
                   filled: false,
                   hintText: '$reps',
                   border: UnderlineInputBorder(),
                   contentPadding: EdgeInsets.zero,
                 ),
+                onChanged: (value) {
+                  if (value == '') {
+                    reps = 10;
+                  } else {
+                    reps = int.parse(value);
+                  }
+                  context.read<AddDayCubit>().updateReps(
+                    widget.exercise.id!,
+                    reps,
+                  );
+                },
               ),
             ),
           ],

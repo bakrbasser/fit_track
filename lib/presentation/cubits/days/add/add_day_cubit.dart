@@ -17,7 +17,7 @@ class AddDayCubit extends Cubit<AddDayState> {
   late int id;
   String name = '';
   String? description;
-  List<TrainingDayExercise> exercises = [];
+  Set<TrainingDayExercise> exercises = {};
 
   bool _isAdded = false;
   bool get isAdded => _isAdded;
@@ -59,11 +59,20 @@ class AddDayCubit extends Cubit<AddDayState> {
   }
 
   Future<void> connectExercisesToDay(int dayId) async {
+    final list = exercises.toList();
     for (var i = 0; i < exercises.length; i++) {
-      exercises[i].trainingDayId = dayId;
-      await connectRepo.addTrainingDayExercise(
-        trainingDayExercise: exercises[i],
-      );
+      list[i].trainingDayId = dayId;
+      await connectRepo.addTrainingDayExercise(trainingDayExercise: list[i]);
     }
+  }
+
+  void updateReps(int exerciseId, int newReps) {
+    exercises.firstWhere((element) => element.exerciseId == exerciseId).reps =
+        newReps;
+  }
+
+  void updateSets(int exerciseId, int newSets) {
+    exercises.firstWhere((element) => element.exerciseId == exerciseId).sets =
+        newSets;
   }
 }

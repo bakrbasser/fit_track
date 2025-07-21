@@ -1,44 +1,44 @@
-import '../../domain/entities/exercise_log.dart';
+import 'package:fit_track/domain/entities/exercise_log.dart';
 
 class ExerciseLogModel {
   final int exerciseId;
   final String date;
-  final int weight;
-  final int sets;
+  final int volume;
+  final int maxWeight;
 
   ExerciseLogModel({
     required this.exerciseId,
     required this.date,
-    required this.weight,
-    required this.sets,
+    required this.volume,
+    required this.maxWeight,
   });
 
   factory ExerciseLogModel.fromJson(Map<String, dynamic> json) =>
       ExerciseLogModel(
         exerciseId: json['exercise_id'],
         date: json['date'],
-        weight: json['weight'],
-        sets: json['sets'],
+        volume: json['volume'],
+        maxWeight: json['maxWeight'],
       );
 
   Map<String, dynamic> toJson() => {
     'exercise_id': exerciseId,
     'date': date,
-    'weight': weight,
-    'sets': sets,
+    'volume': volume,
+    'maxWeight': maxWeight,
   };
 
   factory ExerciseLogModel.fromEntity(ExerciseLog entity) => ExerciseLogModel(
     exerciseId: entity.exerciseId,
     date: entity.date,
-    weight: entity.weight,
-    sets: entity.sets,
+    volume: entity.volume,
+    maxWeight: entity.maxWeight,
   );
 
   ExerciseLog toEntity() => ExerciseLog(
     exerciseId: exerciseId,
     date: date,
-    weight: weight,
-    sets: sets,
+    volume: volume,
+    maxWeight: maxWeight,
   );
 }

@@ -1,4 +1,4 @@
-import 'package:fit_track/core/database_consts.dart';
+import 'package:fit_track/core/data_sources_consts.dart';
 import 'package:fit_track/data/data_source/app_database.dart';
 import 'package:fit_track/data/models/training_day_exercise_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -33,5 +33,23 @@ class TrainingDayExerciseDao {
       );
       // ignore: empty_catches
     } catch (e) {}
+  }
+
+  Future<List<TrainingDayExerciseModel>> fetchTrainingDayExercises({
+    required int dayId,
+  }) async {
+    try {
+      final db = await _db;
+      final exercises = await db.query(
+        TablesName.trainingDayExercise,
+        where: 'trainingDay_id = ?',
+        whereArgs: [dayId],
+      );
+      return exercises
+          .map((json) => TrainingDayExerciseModel.fromJson(json))
+          .toList();
+    } catch (e) {
+      return [];
+    }
   }
 }

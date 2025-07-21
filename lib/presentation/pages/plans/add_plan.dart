@@ -58,7 +58,7 @@ class _AddPlanState extends State<AddPlan> {
               SizedBox(height: 30),
               Padding(
                 padding: EdgeInsets.only(bottom: 5),
-                child: Buttons.saveButton(
+                child: Buttons.CostumeButton(
                   onPressed: () async {
                     final nav = Navigator.of(context);
                     final cub = context.read<AddPlanCubit>();

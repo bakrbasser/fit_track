@@ -1,18 +1,23 @@
 import 'package:fit_track/data/data_source/DAOs/training_plan_dao.dart';
+import 'package:fit_track/data/data_source/hive.dart';
 import 'package:fit_track/data/models/training_plan_model.dart';
 import 'package:fit_track/data/models/training_plan_training_day_model.dart';
-import 'package:fit_track/domain/entities/training_day.dart';
 import 'package:fit_track/domain/entities/training_plan.dart';
 import 'package:fit_track/domain/entities/training_plan_training_day.dart';
 import 'package:fit_track/domain/repositories/training_plan_repository.dart';
 
 class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   TrainingPlanRepositoryImpl._priv();
+
   static TrainingPlanRepositoryImpl instance =
       TrainingPlanRepositoryImpl._priv();
+
   final TrainingPlanDAO _dao = TrainingPlanDAO.instance;
+
   List<TrainingPlan> _trainingPlans = [];
+
   List<TrainingPlan> get trainingPlans => _trainingPlans;
+
   TrainingPlan? activePlan;
 
   @override
@@ -63,13 +68,13 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   }
 
   @override
-  Future<List<TrainingDay>> fetchPlanTrainingDays({
+  Future<List<int>> fetchPlanTrainingDaysIds({
     required int trainingPlanID,
   }) async {
     final days = await _dao.fetchPlanTrainingDays(
       trainingPlanID: trainingPlanID,
     );
-    return List.generate(days.length, (index) => days[index].toEntity());
+    return days;
   }
 
   @override
@@ -110,6 +115,27 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
       final model = TrainingPlanModel.fromEntity(activePlan!);
       await _dao.deactivatePlan(model: model);
       activePlan!.isActivated = false;
+      activePlan = null;
     }
+  }
+
+  @override
+  Future<int?> getPlanNextWorkout(int planId) async {
+    final id = await NextDayDataSource.instance.getPlanNextDayId(planId);
+    if (id == null) {
+      final days = await fetchPlanTrainingDaysIds(
+        trainingPlanID: activePlan!.id!,
+      );
+      await setPlanNextWorkout(planId, days.first);
+      return days.first;
+    } else {
+      return id;
+    }
+  }
+
+  @override
+  Future<void> setPlanNextWorkout(int planId, int dayId) async {
+    //TODO
+    await NextDayDataSource.instance.setPlanNextDayId(planId, dayId);
   }
 }

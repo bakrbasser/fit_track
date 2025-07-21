@@ -1,6 +1,5 @@
-import 'package:fit_track/core/database_consts.dart';
+import 'package:fit_track/core/data_sources_consts.dart';
 import 'package:fit_track/data/data_source/app_database.dart';
-import 'package:fit_track/data/models/training_day_model.dart';
 import 'package:fit_track/data/models/training_plan_model.dart';
 import 'package:fit_track/data/models/training_plan_training_day_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -40,13 +39,11 @@ class TrainingPlanDAO {
     );
   }
 
-  Future<List<TrainingDayModel>> fetchPlanTrainingDays({
-    required int trainingPlanID,
-  }) async {
+  Future<List<int>> fetchPlanTrainingDays({required int trainingPlanID}) async {
     final db = await _db;
     final query = await db.rawQuery(
       '''
-    SELECT *
+    SELECT id
       FROM training_day
           INNER JOIN
           trainingPlan_trainingDay ON training_day.id = trainingDay_id
@@ -54,7 +51,7 @@ class TrainingPlanDAO {
 ''',
       [trainingPlanID],
     );
-    return query.map((e) => TrainingDayModel.fromJson(e)).toList();
+    return query.map((row) => row['id'] as int).toList();
   }
 
   Future linkDayToPlan({required TrainingPlanTrainingDayModel model}) async {

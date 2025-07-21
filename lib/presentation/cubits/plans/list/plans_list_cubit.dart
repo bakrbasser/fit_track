@@ -9,6 +9,7 @@ class PlansListCubit extends Cubit<PlansListState> {
   PlansListCubit() : super(PlansListInitial());
 
   final repo = TrainingPlanRepositoryImpl.instance;
+  TrainingPlan? get activePlan => repo.activePlan;
 
   void loadList() {
     emit(Loading());

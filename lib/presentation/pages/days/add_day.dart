@@ -78,7 +78,7 @@ class _AddTrainingDayState extends State<AddTrainingDay> {
                 ),
               ),
               ExercisesSelectionList(),
-              Buttons.saveButton(
+              Buttons.CostumeButton(
                 onPressed: () async {
                   final nav = Navigator.of(context);
                   final cubit = context.read<AddDayCubit>();

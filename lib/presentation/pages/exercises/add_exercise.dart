@@ -43,7 +43,7 @@ class AddExercise extends StatelessWidget {
                 },
               ),
               SizedBox(height: 30),
-              Buttons.saveButton(
+              Buttons.CostumeButton(
                 onPressed: () async {
                   final nav = Navigator.of(context);
                   final cub = context.read<AddExerciseCubit>();

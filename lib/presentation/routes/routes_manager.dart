@@ -1,3 +1,4 @@
+import 'package:fit_track/domain/entities/training_day.dart';
 import 'package:fit_track/presentation/cubits/days/add/add_day_cubit.dart';
 import 'package:fit_track/presentation/cubits/days/list/days_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/exercises/add/add_exercise_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:fit_track/presentation/cubits/goals/list/goals_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/initialization/initialization_cubit.dart';
 import 'package:fit_track/presentation/cubits/pages_navigator/pages_navigator_cubit.dart';
 import 'package:fit_track/presentation/cubits/plans/add/add_plan_cubit.dart';
+import 'package:fit_track/presentation/cubits/workout_session/workout_session_cubit.dart';
 import 'package:fit_track/presentation/pages/days/add_day.dart';
 import 'package:fit_track/presentation/pages/exercises/add_exercise.dart';
 import 'package:fit_track/presentation/pages/exercises/exercises_screen.dart';
@@ -15,6 +17,7 @@ import 'package:fit_track/presentation/pages/goals/add_goal.dart';
 import 'package:fit_track/presentation/pages/main_page/main_page.dart';
 import 'package:fit_track/presentation/pages/plans/add_plan.dart';
 import 'package:fit_track/presentation/pages/splash/splash_screen.dart';
+import 'package:fit_track/presentation/pages/workout/workout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,6 +30,7 @@ class Routes {
   static const String achievedGoals = '/achievedGoal';
   static const String addPlan = '/addPlan';
   static const String addDay = '/addDay';
+  static const String workoutSession = '/workoutSession';
 }
 
 class RoutesGenerator {
@@ -101,6 +105,15 @@ class RoutesGenerator {
                   BlocProvider(create: (context) => ExercisesListCubit()),
                 ],
                 child: AddTrainingDay(),
+              ),
+        );
+      case Routes.workoutSession:
+        final day = settings.arguments as TrainingDay;
+        return MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create: (context) => WorkoutSessionCubit(day.id!),
+                child: WorkoutScreen(),
               ),
         );
 

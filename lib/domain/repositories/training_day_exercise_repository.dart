@@ -8,4 +8,8 @@ abstract class TrainingDayExerciseRepository {
     required int dayId,
     required int exerciseId,
   });
+
+  Future<List<TrainingDayExercise>> fetchTrainingDayExercises({
+    required int dayId,
+  });
 }

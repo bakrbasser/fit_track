@@ -18,7 +18,12 @@ class AppDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, _dbName);
 
-    return await openDatabase(path, version: _version, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: _version,
+      onCreate: _onCreate,
+      // onUpgrade: _onUpgrade,
+    );
   }
 
   static Future<void> _onCreate(Database db, int version) async {
@@ -42,14 +47,12 @@ class AppDatabase {
     ''');
 
     await db.execute('''
-CREATE TABLE exercise_log (
-    exercise_id INTEGER REFERENCES exercise (id) 
-                        NOT NULL,
-    date        TEXT    NOT NULL,
-    weight      INTEGER NOT NULL,
-    sets        INTEGER NOT NULL,
-    reps        INTEGER NOT NULL
-);
+      CREATE TABLE exercise_log (
+        exercise_id INTEGER NOT NULL REFERENCES exercise(id),
+        date        TEXT    NOT NULL,
+        volume      INTEGER NOT NULL,
+        maxWeight   INTEGER NOT NULL
+      );
     ''');
 
     await db.execute('''
@@ -91,6 +94,21 @@ CREATE TABLE trainingDay_exercise (
 )
     ''');
   }
+
+  // static Future<void> _onUpgrade(
+  //   Database db,
+  //   int oldVersion,
+  //   int newVersion,
+  // ) async {
+  //   if (oldVersion < newVersion) {
+  //     await db.execute('ALTER TABLE exercise_log RENAME TO exercise_log_old;');
+
+  //     await db.execute('DROP TABLE exercise_log_old;');
+  //     print(
+  //       'HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',
+  //     );
+  //   }
+  // }
 
   Future<void> close() async {
     final db = _database;

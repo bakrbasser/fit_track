@@ -1,4 +1,4 @@
-import 'package:fit_track/core/database_consts.dart';
+import 'package:fit_track/core/data_sources_consts.dart';
 import 'package:fit_track/data/data_source/app_database.dart';
 import 'package:fit_track/data/models/goal_model.dart';
 import 'package:sqflite/sqflite.dart';

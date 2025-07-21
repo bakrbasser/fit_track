@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:fit_track/core/presentation/resources/assets_manager.dart';
 import 'package:fit_track/core/presentation/resources/colors_manager.dart';
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
 import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
@@ -47,6 +50,23 @@ class _TrainingDayBottomBarState extends State<TrainingDayBottomBar> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: TrainingDaysList(mode: TrainingDayCardMode.select),
+    );
+  }
+}
+
+class PlanImage extends StatelessWidget {
+  const PlanImage({super.key});
+  String imageIndex() {
+    final randomizer = Random();
+    final index = randomizer.nextInt(AssetsManager.plansPhotos.length);
+    return AssetsManager.plansPhotos[index];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      child: Image.asset(imageIndex(), fit: BoxFit.fitWidth),
     );
   }
 }

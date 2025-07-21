@@ -4,6 +4,8 @@ import 'package:fit_track/domain/entities/exercise_log.dart';
 import 'package:fit_track/domain/repositories/exercise_log_repository.dart';
 
 class ExerciseLogRepositoryImpl implements ExerciseLogRepository {
+  ExerciseLogRepositoryImpl._priv();
+  static ExerciseLogRepositoryImpl instance = ExerciseLogRepositoryImpl._priv();
   final _dao = ExerciseLogDao.instance;
   @override
   Future<void> addExerciseLog({required ExerciseLog exerciseLog}) async {
