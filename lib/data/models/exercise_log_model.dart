@@ -1,7 +1,7 @@
 import 'package:fit_track/domain/entities/exercise_log.dart';
 
 class ExerciseLogModel {
-  final int exerciseId;
+  final int? exerciseId;
   final String date;
   final int volume;
   final int maxWeight;

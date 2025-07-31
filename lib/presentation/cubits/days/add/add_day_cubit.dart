@@ -47,6 +47,9 @@ class AddDayCubit extends Cubit<AddDayState> {
         return;
       }
     }
+    if (exercises.isEmpty) {
+      emit(Error(message: 'You selected no trainings'));
+    }
 
     id = await dayRepo.addTrainingDay(
       trainingDay: TrainingDay(id: null, name: name, description: description),
@@ -55,7 +58,7 @@ class AddDayCubit extends Cubit<AddDayState> {
     await connectExercisesToDay(id);
     _isAdded = true;
 
-    emit(AddedDay(day: newDay));
+    emit(AddedDay(day: newDay, exercisesCount: exercises.length));
   }
 
   Future<void> connectExercisesToDay(int dayId) async {

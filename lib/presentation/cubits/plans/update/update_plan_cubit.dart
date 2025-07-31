@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:fit_track/data/repositories_impl/training_day_repository_impl.dart';
 import 'package:fit_track/data/repositories_impl/training_plan_repository_impl.dart';
 import 'package:fit_track/domain/entities/training_plan.dart';
 import 'package:meta/meta.dart';
@@ -9,16 +10,15 @@ class UpdatePlanCubit extends Cubit<UpdatePlanState> {
   UpdatePlanCubit({required this.plan}) : super(UpdatePlanInitial());
 
   final repo = TrainingPlanRepositoryImpl.instance;
+  final daysRepo = TrainingDayRepositoryImpl.instance;
   final TrainingPlan plan;
 
   String _name = '';
   String? _description = '';
   String? _icon = '';
-
   set name(String name) => _name = name;
   set description(String description) => _description = description;
   set icon(String icon) => _icon = icon;
-
   bool _isUpdated = false;
   bool get isUpdated => _isUpdated;
 
@@ -44,5 +44,6 @@ class UpdatePlanCubit extends Cubit<UpdatePlanState> {
     );
 
     await repo.updateTrainingPlan(trainingPlan: updatedPlan);
+    emit(UpdatePlan());
   }
 }

@@ -46,13 +46,14 @@ class TrainingDayDao {
     required TrainingDayExerciseModel trainingDayExercise,
   }) async {
     final db = await _db;
+
     await db.insert(
       TablesName.trainingDayExercise,
       trainingDayExercise.toJson(),
     );
   }
 
-  Future removeTrainingDayExercises({
+  Future removeTrainingDayExercise({
     required TrainingDayExerciseModel trainingDayExercise,
   }) async {
     final db = await _db;
@@ -63,6 +64,15 @@ class TrainingDayDao {
         trainingDayExercise.trainingDayId,
         trainingDayExercise.exerciseId,
       ],
+    );
+  }
+
+  Future removeAllTrainingDayExercise({required int trainingDayId}) async {
+    final db = await _db;
+    await db.delete(
+      TablesName.trainingDayExercise,
+      where: 'trainingDay_id = ?',
+      whereArgs: [trainingDayId],
     );
   }
 

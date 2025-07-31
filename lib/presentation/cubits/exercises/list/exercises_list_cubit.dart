@@ -24,4 +24,7 @@ class ExercisesListCubit extends Cubit<ExercisesListState> {
 
   Exercise exerciseById(int id) =>
       exercisesRepo.exercises.singleWhere((element) => element.id == id);
+
+  Future<void> deleteExercise(int exerciseID) async =>
+      await exercisesRepo.deleteExercise(exerciseID: exerciseID);
 }

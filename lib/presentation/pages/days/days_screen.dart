@@ -43,7 +43,8 @@ class TrainingDaysList extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: CardList(
               items: state.days,
-              builder: (item) => TrainingDayCard(mode: mode, trainingDay: item),
+              builder:
+                  (item) => TrainingDayCard(mode: mode, trainingDay: item!),
             ),
           );
         } else {

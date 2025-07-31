@@ -19,7 +19,6 @@ class MainPage extends StatelessWidget {
         BlocProvider(create: (_) => PagesNavigatorCubit()),
         BlocProvider(create: (_) => PlansListCubit()),
         BlocProvider(create: (_) => GoalsListCubit()),
-        // BlocProvider(create: (_) => DaysListCubit()),
       ],
       child: Scaffold(
         bottomNavigationBar: const MainNavigationBar(),

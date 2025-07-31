@@ -25,4 +25,14 @@ class TodayWorkoutCubit extends Cubit<TodayWorkoutState> {
       emit(FetchedTodayWorkout(trainingDay: day, trainingsCount: dayCount));
     }
   }
+
+  Future<void> setPlanNextWorkout() async {
+    planRepo.setPlanNextWorkout();
+    final dayId = await planRepo.getPlanNextWorkout(planRepo.activePlan!.id!);
+    final day = dayRepo.trainingDays.firstWhere(
+      (element) => element.id! == dayId,
+    );
+    final dayCount = await dayRepo.dayExercisesCount(dayId!);
+    emit(FetchedTodayWorkout(trainingDay: day, trainingsCount: dayCount));
+  }
 }

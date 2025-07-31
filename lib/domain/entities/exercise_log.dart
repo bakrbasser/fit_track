@@ -1,5 +1,5 @@
 class ExerciseLog {
-  final int exerciseId;
+  final int? exerciseId;
   final String date;
   final int volume;
   final int maxWeight;

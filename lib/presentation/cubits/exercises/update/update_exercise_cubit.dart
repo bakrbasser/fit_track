@@ -9,6 +9,7 @@ class UpdateExerciseCubit extends Cubit<UpdateExerciseState> {
 
   final exercisesRepo = ExercisesRepositoryImpl.instance;
   final Exercise exercise;
+  Exercise? updatedExercise;
   String _name = '';
   String? _instructions;
 
@@ -29,11 +30,11 @@ class UpdateExerciseCubit extends Cubit<UpdateExerciseState> {
       _instructions = exercise.instructions;
     }
 
-    final updatedExercise = Exercise(
+    updatedExercise = Exercise(
       id: exercise.id,
       name: _name,
       instructions: _instructions,
     );
-    exercisesRepo.updateExercise(exercise: updatedExercise);
+    await exercisesRepo.updateExercise(exercise: updatedExercise!);
   }
 }

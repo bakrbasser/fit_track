@@ -34,4 +34,8 @@ class GoalsListCubit extends Cubit<GoalsListState> {
       emit(FullList(goals: _achievedGoals));
     }
   }
+
+  void deleteGoal(Goal goal) {
+    repo.deleteGoal(goalId: goal.id!);
+  }
 }

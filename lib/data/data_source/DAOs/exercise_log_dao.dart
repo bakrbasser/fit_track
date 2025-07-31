@@ -35,4 +35,22 @@ class ExerciseLogDao {
       whereArgs: [exerciseLog.exerciseId],
     );
   }
+
+  Future<List<ExerciseLogModel>> fetchLogsByDate(DateTime date) async {
+    final db = await _db;
+    final query = await db.rawQuery(
+      '''SELECT 
+       date,
+       Sum(maxWeight) AS maxWeight,
+       Sum(volume) AS volume
+  FROM exercise_log
+  where date >= ?
+ GROUP BY date 
+ Order by date;
+
+''',
+      [date.toIso8601String()],
+    );
+    return query.map((json) => ExerciseLogModel.fromJson(json)).toList();
+  }
 }

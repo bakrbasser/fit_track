@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fit_track/core/formatters.dart';
 import 'package:fit_track/core/presentation/resources/colors_manager.dart';
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
+import 'package:fit_track/core/presentation/resources/string_manager.dart';
 import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:fit_track/presentation/cubits/workout_session/workout_session_cubit.dart';
 import 'package:fit_track/presentation/widgets/buttons.dart';
@@ -53,8 +54,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                           ),
                         ),
                         SizedBox(height: 30),
-                        Buttons.CostumeButton(
-                          //TODO
+                        Buttons.costumeButton(
                           onPressed: () {
                             context
                                 .read<WorkoutSessionCubit>()
@@ -63,7 +63,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                           child: Text('Complete Exercise'),
                         ),
                         SizedBox(height: 10),
-                        Buttons.CostumeButton(
+                        Buttons.costumeButton(
                           onPressed: () {
                             context.read<WorkoutSessionCubit>().skipExercise();
                           },
@@ -79,7 +79,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       child: TimerCircularProgress(),
                     );
                   } else {
-                    return Placeholder();
+                    return FinishedWorkout();
                   }
                 },
               ),
@@ -146,14 +146,26 @@ class _SessionTimeState extends State<SessionTime> {
   @override
   void dispose() {
     super.dispose();
+    timer!.cancel();
     stopwatch.stop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      HH_MM(stopwatch.elapsed),
-      style: FontsManager.lexendMedium(size: 18, color: ColorsManager.offWhite),
+    return BlocListener<WorkoutSessionCubit, WorkoutSessionState>(
+      listener: (context, state) {
+        if (state is FinishedWorkout) {
+          stopwatch.stop();
+          timer!.cancel();
+        }
+      },
+      child: Text(
+        HH_MM(stopwatch.elapsed),
+        style: FontsManager.lexendMedium(
+          size: 18,
+          color: ColorsManager.offWhite,
+        ),
+      ),
     );
   }
 }
@@ -317,7 +329,7 @@ class _TimerCircularProgressState extends State<TimerCircularProgress> {
             ],
           ),
           SizedBox(height: 30),
-          Buttons.CostumeButton(
+          Buttons.costumeButton(
             onPressed: () {
               till!.cancel();
               context.read<WorkoutSessionCubit>().nextWorkout();
@@ -328,6 +340,35 @@ class _TimerCircularProgressState extends State<TimerCircularProgress> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class FinishedWorkout extends StatelessWidget {
+  const FinishedWorkout({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          StringManager.finishedWorkout,
+          style: FontsManager.lexendMedium(size: 20),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 30),
+        Buttons.costumeButton(
+          backgroundColor: ColorsManager.borderGreen,
+          width: ScreenSizeHelper.width_P(context, 0.8),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(
+            'Finish Workout',
+            style: FontsManager.lexendMedium(size: 20),
+          ),
+        ),
+      ],
     );
   }
 }

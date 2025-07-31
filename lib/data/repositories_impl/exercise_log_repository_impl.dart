@@ -18,4 +18,26 @@ class ExerciseLogRepositoryImpl implements ExerciseLogRepository {
     final logs = await _dao.fetchLogsByExerciseId(exerciseId);
     return List.generate(logs.length, (index) => logs[index].toEntity());
   }
+
+  @override
+  Future<List<double>> fetchVolumeByDate(DateTime date) async {
+    final logs = await _dao.fetchLogsByDate(date);
+    List<double> volumes = List.filled(7, 0);
+    if (logs.isNotEmpty) {
+      int i = 0;
+      DateTime logDate = DateTime.parse(logs[i].date);
+      for (int j = 0; j < 7; j++) {
+        if (date.day == logDate.day) {
+          volumes[j] = logs[i].volume.toDouble();
+          i++;
+          if (i == logs.length) {
+            break;
+          }
+          logDate = DateTime.parse(logs[i].date);
+        }
+        date = date.add(Duration(days: 1));
+      }
+    }
+    return volumes;
+  }
 }

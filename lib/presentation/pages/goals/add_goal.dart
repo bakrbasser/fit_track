@@ -84,7 +84,7 @@ class AddGoal extends StatelessWidget {
                 },
               ),
               SizedBox(height: 30),
-              Buttons.CostumeButton(
+              Buttons.costumeButton(
                 onPressed: () async {
                   final nav = Navigator.of(context);
                   final cub = context.read<AddGoalCubit>();

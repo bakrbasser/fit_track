@@ -31,4 +31,12 @@ class PlansListCubit extends Cubit<PlansListState> {
     await repo.deactivatePlan();
     loadList();
   }
+
+  Future<void> deleteTrainingPlan(int trainingPlanId) async {
+    if (activePlan != null && activePlan!.id! == trainingPlanId) {
+      await repo.deactivatePlan();
+    }
+    await repo.deleteTrainingPlan(trainingPlanId: trainingPlanId);
+    loadList();
+  }
 }

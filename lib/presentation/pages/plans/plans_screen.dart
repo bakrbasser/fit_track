@@ -2,7 +2,6 @@ import 'package:fit_track/core/presentation/resources/string_manager.dart';
 import 'package:fit_track/presentation/cubits/plans/list/plans_list_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
-import 'package:fit_track/presentation/widgets/dialogs.dart';
 import 'package:fit_track/presentation/widgets/general.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,11 +54,9 @@ class AddPlanButton extends StatelessWidget {
       onPressed: () async {
         final nav = Navigator.of(context);
         final cub = context.read<PlansListCubit>();
-        int? howManyDays = await showDaysDialog(context);
 
-        final isAdded =
-            await nav.pushNamed(Routes.addPlan, arguments: howManyDays) as bool;
-        if (isAdded) {
+        final isAdded = await nav.pushNamed(Routes.addPlan) as bool?;
+        if (isAdded != null && isAdded) {
           cub.loadList();
         }
       },

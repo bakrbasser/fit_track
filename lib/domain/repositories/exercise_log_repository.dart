@@ -6,4 +6,6 @@ abstract class ExerciseLogRepository {
 
   // Add a new exercise log
   Future<void> addExerciseLog({required ExerciseLog exerciseLog});
+
+  Future<List<double>> fetchVolumeByDate(DateTime date);
 }

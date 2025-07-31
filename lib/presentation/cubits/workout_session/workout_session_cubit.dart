@@ -5,6 +5,7 @@ import 'package:fit_track/data/repositories_impl/training_day_exercise_repositor
 import 'package:fit_track/domain/entities/exercise.dart';
 import 'package:fit_track/domain/entities/exercise_log.dart';
 import 'package:fit_track/domain/entities/training_day_exercise.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 part 'workout_session_state.dart';
@@ -90,7 +91,7 @@ class WorkoutSessionCubit extends Cubit<WorkoutSessionState> {
     int volume = totalReps * totalWeight;
     final exerciseLog = ExerciseLog(
       exerciseId: exercises[index].exerciseId,
-      date: DateTime.now().toIso8601String(),
+      date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
       volume: volume,
       maxWeight: maxWeight,
     );

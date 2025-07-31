@@ -70,3 +70,34 @@ class PlanImage extends StatelessWidget {
     );
   }
 }
+
+Future<bool> showConfirmationDialog(
+  BuildContext context,
+  String message,
+) async {
+  return await showDialog(
+        context: context,
+        builder:
+            (context) => AlertDialog(
+              content: Text(
+                message,
+                style: FontsManager.lexendMedium(color: ColorsManager.textGrey),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('Cancel', style: FontsManager.lexendMedium()),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text('Confirm', style: FontsManager.lexendMedium()),
+                ),
+              ],
+            ),
+      )
+      as bool;
+}

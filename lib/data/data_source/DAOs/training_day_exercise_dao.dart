@@ -7,6 +7,7 @@ class TrainingDayExerciseDao {
   TrainingDayExerciseDao._internal();
   static TrainingDayExerciseDao dao = TrainingDayExerciseDao._internal();
   Future<Database> get _db async => await AppDatabase.instance.database;
+
   Future<int> addTrainingDayExercise({
     required TrainingDayExerciseModel model,
   }) async {

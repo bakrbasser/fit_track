@@ -2,11 +2,13 @@ import 'package:fit_track/core/presentation/resources/colors_manager.dart';
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
 import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:fit_track/domain/entities/training_plan.dart';
+import 'package:fit_track/presentation/cubits/charts/charts_cubit.dart';
 import 'package:fit_track/presentation/cubits/pages_navigator/pages_navigator_cubit.dart';
 import 'package:fit_track/presentation/cubits/plans/list/plans_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/plans/today_workout/today_workout_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/general.dart';
+import 'package:fit_track/presentation/widgets/line_charts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +26,22 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text('FitTrack'), actions: [Settings()]),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(child: ActivePlanAndWorkout()),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ActivePlanAndWorkout(),
+              SizedBox(height: 10),
+              Text('Weekly Progress', style: FontsManager.lexendBold(size: 25)),
+              SizedBox(height: 10),
+
+              BlocProvider(
+                create: (context) => ChartsCubit(),
+                child: WeeklyProgressChart(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -48,16 +65,16 @@ class _ActivePlanAndWorkoutState extends State<ActivePlanAndWorkout> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Active Plan', style: FontsManager.lexendBold(size: 25)),
-          SizedBox(height: 30),
+          SizedBox(height: 15),
           SizedBox(
-            height: ScreenSizeHelper.height_P(context, 0.2),
+            height: ScreenSizeHelper.height_P(context, 0.17),
             child: ActivePlan(),
           ),
           SizedBox(height: 30),
           Text('Next Workout', style: FontsManager.lexendBold(size: 25)),
-          SizedBox(height: 30),
+          SizedBox(height: 15),
           SizedBox(
-            height: ScreenSizeHelper.height_P(context, 0.2),
+            height: ScreenSizeHelper.height_P(context, 0.17),
             child: BlocProvider(
               create: (context) => TodayWorkoutCubit(),
               child: ActiveTraining(),
@@ -197,12 +214,15 @@ class _ActiveTrainingState extends State<ActiveTraining> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: ColorsManager.darkGreen,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pushNamed(
                             context,
                             Routes.workoutSession,
                             arguments: state.trainingDay,
                           );
+                          context
+                              .read<TodayWorkoutCubit>()
+                              .setPlanNextWorkout();
                         },
 
                         child: Text(
