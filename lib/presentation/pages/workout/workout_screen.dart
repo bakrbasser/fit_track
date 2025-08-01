@@ -97,7 +97,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     ),
                   ),
                   Spacer(),
-                  //TODO settings choose weight measure unit
                   TotalVolume(),
                 ],
               ),

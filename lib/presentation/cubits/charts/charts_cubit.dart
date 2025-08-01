@@ -11,7 +11,6 @@ class ChartsCubit extends Cubit<ChartsState> {
 
   late List<ExerciseLog> _exerciseLogs;
 
-  //TODO FIX TODAY NOT SHOWING
   Future<void> weeklyProgress() async {
     emit(ChartLoading());
     final date = DateTime.now().subtract(Duration(days: 6));
