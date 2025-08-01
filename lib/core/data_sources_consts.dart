@@ -20,3 +20,7 @@ class TablesName {
   /// Junction table linking training days to exercises
   static String get trainingDayExercise => 'trainingDay_exercise';
 }
+
+class BoxesNames {
+  static String get nextDay => 'NextDay';
+}

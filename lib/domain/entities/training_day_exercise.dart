@@ -1,8 +1,8 @@
 class TrainingDayExercise {
   int? trainingDayId;
   final int exerciseId;
-  final int sets;
-  final int reps;
+  int sets;
+  int reps;
 
   TrainingDayExercise({
     required this.trainingDayId,

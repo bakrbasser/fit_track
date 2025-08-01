@@ -58,8 +58,8 @@ class _AddGoalButton extends StatelessWidget {
       onPressed: () async {
         final cubit = context.read<GoalsListCubit>();
         final isAdded =
-            await Navigator.pushNamed(context, Routes.addGoal) as bool;
-        if (isAdded) {
+            await Navigator.pushNamed(context, Routes.addGoal) as bool?;
+        if (isAdded != null && isAdded) {
           cubit.loadUnAchievedList();
         }
       },

@@ -10,7 +10,9 @@ class AddPlanCubit extends Cubit<AddPlanState> {
   AddPlanCubit() : super(AddPlanInitial());
 
   final repo = TrainingPlanRepositoryImpl.instance;
-  Map<int, int> trainingDaysIds = {};
+  final daysRepo = TrainingPlanRepositoryImpl.instance;
+
+  // CardIndex - TrainingDayId
   String _name = '';
   String? _description;
   String? _icon;
@@ -42,19 +44,11 @@ class AddPlanCubit extends Cubit<AddPlanState> {
       ),
     );
 
-    for (var i = 0; i < trainingDaysIds.length; i++) {
-      repo.linkDaysToPlan(daysID: trainingDaysIds.values.toList());
-    }
+    // await repo.linkDaysToPlan(daysID: trainingDaysIds.values.toList());
 
     final TrainingPlan newPlan = repo.trainingPlans.last;
     _isAdded = true;
 
     emit(AddedPlan(plan: newPlan));
   }
-
-  void addDayToList({required int index, required int dayID}) {
-    trainingDaysIds[index] = dayID;
-  }
-
-  bool checkFullDays(int count) => count == trainingDaysIds.length;
 }

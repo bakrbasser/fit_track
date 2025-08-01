@@ -27,4 +27,12 @@ class TrainingDayExerciseRepositoryImpl
   }) async {
     _dao.deleteTrainingDayExercise(dayId: dayId, exerciseId: exerciseId);
   }
+
+  @override
+  Future<List<TrainingDayExercise>> fetchTrainingDayExercises({
+    required int dayId,
+  }) async {
+    final exercises = await _dao.fetchTrainingDayExercises(dayId: dayId);
+    return exercises.map((e) => e.toEntity()).toList();
+  }
 }

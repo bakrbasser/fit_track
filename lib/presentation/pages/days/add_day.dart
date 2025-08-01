@@ -26,78 +26,82 @@ class _AddTrainingDayState extends State<AddTrainingDay> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Add Training Day')),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: Text('Name', style: FontsManager.lexendBold(size: 25)),
-              ),
-              SizedBox(height: 15),
-              TextFormField(
-                style: FontsManager.lexendRegular(),
-                onSaved: (value) {
-                  context.read<AddDayCubit>().name = value!;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return StringManager.emptyNameField;
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: Text(
-                  'Description',
-                  style: FontsManager.lexendBold(size: 25),
+    return BlocListener<AddDayCubit, AddDayState>(
+      listener: (context, state) {
+        if (state is AddedDay) {
+          Navigator.pop(context, {
+            'day': state.day,
+            'count': state.exercisesCount,
+          });
+        } else if (state is Error) {
+          showConfirmationDialog(context, state.message);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text('Add Training Day')),
+        body: Padding(
+          padding: EdgeInsets.all(8),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Text('Name', style: FontsManager.lexendBold(size: 25)),
                 ),
-              ),
-              SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(contentPadding: EdgeInsets.all(8)),
-                style: FontsManager.lexendRegular(),
-                maxLines: 4,
-                onSaved: (value) {
-                  context.read<AddDayCubit>().description = value;
-                },
-              ),
-              SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: Text(
-                  'Exercises',
-                  style: FontsManager.lexendBold(size: 25),
-                ),
-              ),
-              ExercisesSelectionList(),
-              Buttons.saveButton(
-                onPressed: () async {
-                  final nav = Navigator.of(context);
-                  final cubit = context.read<AddDayCubit>();
-                  if (_formKey.currentState!.validate()) {
-                    if (cubit.exercises.isNotEmpty) {
-                      _formKey.currentState!.save();
-                      await cubit.addDay();
-                      nav.pop({
-                        'isAdded': cubit.isAdded,
-                        'id': cubit.id,
-                        'name': cubit.name,
-                        'count': cubit.exercises.length,
-                      });
+                SizedBox(height: 15),
+                TextFormField(
+                  style: FontsManager.lexendRegular(),
+                  onSaved: (value) {
+                    context.read<AddDayCubit>().name = value!;
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return StringManager.emptyNameField;
                     }
-                  }
-                },
-                child: Text('Save Training Day'),
-              ),
-            ],
+                    return null;
+                  },
+                ),
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Text(
+                    'Description',
+                    style: FontsManager.lexendBold(size: 25),
+                  ),
+                ),
+                SizedBox(height: 15),
+                TextFormField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(8),
+                  ),
+                  style: FontsManager.lexendRegular(),
+                  maxLines: 4,
+                  onSaved: (value) {
+                    context.read<AddDayCubit>().description = value;
+                  },
+                ),
+                SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Text(
+                    'Exercises',
+                    style: FontsManager.lexendBold(size: 25),
+                  ),
+                ),
+                ExercisesSelectionList(),
+                Buttons.costumeButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      await context.read<AddDayCubit>().addDay();
+                    }
+                  },
+                  child: Text('Save Training Day'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,23 +1,29 @@
 import 'package:fit_track/data/data_source/DAOs/training_plan_dao.dart';
+import 'package:fit_track/data/data_source/DAOs/training_plan_day_dao.dart';
+import 'package:fit_track/data/data_source/hive.dart';
 import 'package:fit_track/data/models/training_plan_model.dart';
-import 'package:fit_track/data/models/training_plan_training_day_model.dart';
-import 'package:fit_track/domain/entities/training_day.dart';
 import 'package:fit_track/domain/entities/training_plan.dart';
-import 'package:fit_track/domain/entities/training_plan_training_day.dart';
 import 'package:fit_track/domain/repositories/training_plan_repository.dart';
 
 class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   TrainingPlanRepositoryImpl._priv();
+
   static TrainingPlanRepositoryImpl instance =
       TrainingPlanRepositoryImpl._priv();
-  final TrainingPlanDAO _dao = TrainingPlanDAO.instance;
+
+  // ignore: non_constant_identifier_names
+  final TrainingPlanDAO _planDAO = TrainingPlanDAO.instance;
+  final TrainingPlanDayDao _dayPlanDAO = TrainingPlanDayDao.dao;
+
   List<TrainingPlan> _trainingPlans = [];
+
   List<TrainingPlan> get trainingPlans => _trainingPlans;
+
   TrainingPlan? activePlan;
 
   @override
   Future fetchTrainingPlans() async {
-    final plans = await _dao.fetchTrainingPlans();
+    final plans = await _planDAO.fetchTrainingPlans();
     _trainingPlans = List.generate(
       plans.length,
       (index) => plans[index].toEntity(),
@@ -33,7 +39,7 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   @override
   Future addTrainingPlan({required TrainingPlan trainingPlan}) async {
     final model = TrainingPlanModel.fromEntity(trainingPlan);
-    int id = await _dao.addTrainingPlan(trainingPlan: model);
+    int id = await _planDAO.addTrainingPlan(trainingPlan: model);
     _trainingPlans.add(
       TrainingPlan(
         id: id,
@@ -47,14 +53,14 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
 
   @override
   Future<void> deleteTrainingPlan({required int trainingPlanId}) async {
-    await _dao.deleteTrainingPlan(trainingPlanId: trainingPlanId);
+    await _planDAO.deleteTrainingPlan(trainingPlanId: trainingPlanId);
     _trainingPlans.removeWhere((plan) => plan.id == trainingPlanId);
   }
 
   @override
   Future<void> updateTrainingPlan({required TrainingPlan trainingPlan}) async {
     final model = TrainingPlanModel.fromEntity(trainingPlan);
-    await _dao.updateTrainingPlan(trainingPlan: model);
+    await _planDAO.updateTrainingPlan(trainingPlan: model);
 
     final index = _trainingPlans.indexWhere((p) => p.id == trainingPlan.id);
     if (index != -1) {
@@ -63,43 +69,12 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   }
 
   @override
-  Future<List<TrainingDay>> fetchPlanTrainingDays({
-    required int trainingPlanID,
-  }) async {
-    final days = await _dao.fetchPlanTrainingDays(
-      trainingPlanID: trainingPlanID,
-    );
-    return List.generate(days.length, (index) => days[index].toEntity());
-  }
-
-  @override
-  Future linkDaysToPlan({required List<int> daysID}) async {
-    for (var i = 0; i < daysID.length; i++) {
-      final model = TrainingPlanTrainingDayModel(
-        trainingPlanId: _trainingPlans.last.id!,
-        trainingDayId: daysID[i],
-      );
-      await _dao.linkDayToPlan(model: model);
-    }
-  }
-
-  @override
-  Future removeLinkDayToPlan({
-    required TrainingPlanTrainingDay trainingPlanTrainingDay,
-  }) async {
-    final model = TrainingPlanTrainingDayModel.fromEntity(
-      trainingPlanTrainingDay,
-    );
-    await _dao.removeLinkDayToPlan(model: model);
-  }
-
-  @override
   Future<void> activatePlan({required TrainingPlan plan}) async {
     final model = TrainingPlanModel.fromEntity(plan);
     if (activePlan != null) {
       await deactivatePlan();
     }
-    await _dao.activatePlan(model: model);
+    await _planDAO.activatePlan(model: model);
     activePlan = plan;
     plan.isActivated = true;
   }
@@ -108,8 +83,45 @@ class TrainingPlanRepositoryImpl implements TrainingPlanRepository {
   Future<void> deactivatePlan() async {
     if (activePlan != null) {
       final model = TrainingPlanModel.fromEntity(activePlan!);
-      await _dao.deactivatePlan(model: model);
+      await _planDAO.deactivatePlan(model: model);
       activePlan!.isActivated = false;
+      activePlan = null;
+    }
+  }
+
+  @override
+  Future<int?> getPlanNextWorkout(int planId) async {
+    final id = await NextDayDataSource.instance.getPlanNextDayId(planId);
+    if (id == null) {
+      final days = await _dayPlanDAO.fetchPlanTrainingDaysIds(
+        trainingPlanID: activePlan!.id!,
+      );
+      await NextDayDataSource.instance.setPlanNextDayId(planId, days.first);
+      return days.first;
+    } else {
+      return id;
+    }
+  }
+
+  @override
+  Future<void> setPlanNextWorkout() async {
+    final id = await NextDayDataSource.instance.getPlanNextDayId(
+      activePlan!.id!,
+    );
+    final days = await _dayPlanDAO.fetchPlanTrainingDaysIds(
+      trainingPlanID: activePlan!.id!,
+    );
+    var currentDayIndex = days.indexOf(id!);
+    if (currentDayIndex == days.length - 1) {
+      await NextDayDataSource.instance.setPlanNextDayId(
+        activePlan!.id!,
+        days.first,
+      );
+    } else {
+      await NextDayDataSource.instance.setPlanNextDayId(
+        activePlan!.id!,
+        days[currentDayIndex + 1],
+      );
     }
   }
 }

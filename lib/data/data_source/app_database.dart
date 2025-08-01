@@ -18,7 +18,12 @@ class AppDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, _dbName);
 
-    return await openDatabase(path, version: _version, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: _version,
+      onCreate: _onCreate,
+      // onUpgrade: onUpdate,
+    );
   }
 
   static Future<void> _onCreate(Database db, int version) async {
@@ -31,25 +36,24 @@ class AppDatabase {
     ''');
 
     await db.execute('''
-      CREATE TABLE goal (
+CREATE TABLE goal (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    exercise_id INTEGER REFERENCES exercise (id) 
+    exercise_id INTEGER REFERENCES exercise (id) ON DELETE CASCADE
                         NOT NULL,
     weight      INTEGER,
     reps        INTEGER,
     isAchieved  INTEGER DEFAULT (0) 
-)
+);
     ''');
 
     await db.execute('''
-CREATE TABLE exercise_log (
-    exercise_id INTEGER REFERENCES exercise (id) 
+     CREATE TABLE exercise_log (
+    exercise_id INTEGER REFERENCES exercise (id) ON DELETE CASCADE
                         NOT NULL,
     date        TEXT    NOT NULL,
-    weight      INTEGER NOT NULL,
-    sets        INTEGER NOT NULL,
-    reps        INTEGER NOT NULL
-);
+    maxWeight      INTEGER NOT NULL,
+    volume        INTEGER NOT NULL
+)
     ''');
 
     await db.execute('''
@@ -73,24 +77,42 @@ CREATE TABLE exercise_log (
     ''');
     await db.execute('''
 CREATE TABLE trainingPlan_trainingDay (
-    trainingDay_id   INTEGER REFERENCES training_day (id) 
+    trainingDay_id  INTEGER REFERENCES training_day (id) ON DELETE CASCADE
                             NOT NULL,
-    trainingPlan_id         REFERENCES training_plan (id) 
+    trainingPlan_id         REFERENCES training_plan (id) ON DELETE CASCADE
                             NOT NULL
-)
+);
 
     ''');
     await db.execute('''
 CREATE TABLE trainingDay_exercise (
     trainingDay_id         REFERENCES training_day (id) 
-                          NOT NULL,
-    exercise_id   INTEGER REFERENCES exercise (id) 
-                          NOT NULL,
-    sets          INTEGER NOT NULL,
-    reps          INTEGER NOT NULL
-)
+                           NOT NULL,
+    exercise_id    INTEGER REFERENCES exercise (id) ON DELETE CASCADE
+                           NOT NULL,
+    sets           INTEGER NOT NULL,
+    reps           INTEGER NOT NULL
+);
     ''');
   }
+
+  //   static Future<void> onUpdate(Database db, int oldV, int newV) async {
+  //     if (oldV < newV) {
+  //       await db.execute('Drop Table exercise_log');
+  //       await db.execute('''
+  //      CREATE TABLE exercise_log (
+  //     exercise_id INTEGER REFERENCES exercise (id) ON DELETE CASCADE
+  //                         NOT NULL,
+  //     date        TEXT    NOT NULL,
+  //     maxWeight      INTEGER NOT NULL,
+  //     volume        INTEGER NOT NULL
+  // )
+  //     ''');
+  //       print(
+  //         'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh',
+  //       );
+  //     }
+  //   }
 
   Future<void> close() async {
     final db = _database;

@@ -56,8 +56,8 @@ class AddExerciseButton extends StatelessWidget {
       onPressed: () async {
         final cubit = context.read<ExercisesListCubit>();
         final isAdded =
-            await Navigator.pushNamed(context, Routes.addExercises) as bool;
-        if (isAdded) {
+            await Navigator.pushNamed(context, Routes.addExercises) as bool?;
+        if (isAdded != null && isAdded) {
           cubit.loadList();
         }
       },

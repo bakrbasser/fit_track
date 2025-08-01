@@ -1,4 +1,4 @@
-import 'package:fit_track/core/database_consts.dart';
+import 'package:fit_track/core/data_sources_consts.dart';
 import 'package:fit_track/data/data_source/app_database.dart';
 import 'package:fit_track/data/models/exercise_log_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -34,5 +34,23 @@ class ExerciseLogDao {
       where: 'exercise_id = ?',
       whereArgs: [exerciseLog.exerciseId],
     );
+  }
+
+  Future<List<ExerciseLogModel>> fetchLogsByDate(DateTime date) async {
+    final db = await _db;
+    final query = await db.rawQuery(
+      '''SELECT 
+       date,
+       Sum(maxWeight) AS maxWeight,
+       Sum(volume) AS volume
+  FROM exercise_log
+  where date >= ?
+ GROUP BY date 
+ Order by date;
+
+''',
+      [date.toIso8601String()],
+    );
+    return query.map((json) => ExerciseLogModel.fromJson(json)).toList();
   }
 }

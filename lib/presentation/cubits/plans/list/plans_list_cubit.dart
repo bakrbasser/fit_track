@@ -9,6 +9,7 @@ class PlansListCubit extends Cubit<PlansListState> {
   PlansListCubit() : super(PlansListInitial());
 
   final repo = TrainingPlanRepositoryImpl.instance;
+  TrainingPlan? get activePlan => repo.activePlan;
 
   void loadList() {
     emit(Loading());
@@ -28,6 +29,14 @@ class PlansListCubit extends Cubit<PlansListState> {
 
   Future<void> deactivatePlan() async {
     await repo.deactivatePlan();
+    loadList();
+  }
+
+  Future<void> deleteTrainingPlan(int trainingPlanId) async {
+    if (activePlan != null && activePlan!.id! == trainingPlanId) {
+      await repo.deactivatePlan();
+    }
+    await repo.deleteTrainingPlan(trainingPlanId: trainingPlanId);
     loadList();
   }
 }

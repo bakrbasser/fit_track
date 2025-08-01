@@ -10,7 +10,8 @@ final class Loading extends DaysListState {}
 final class EmptyList extends DaysListState {}
 
 final class FullList extends DaysListState {
-  final List<TrainingDay> days;
+  List<TrainingDay?> days;
+  List<int> counts;
 
-  FullList({required this.days});
+  FullList({required this.days, required this.counts});
 }

@@ -1,13 +1,13 @@
 class ExerciseLog {
-  final int exerciseId;
+  final int? exerciseId;
   final String date;
-  final int weight;
-  final int sets;
+  final int volume;
+  final int maxWeight;
 
   ExerciseLog({
     required this.exerciseId,
     required this.date,
-    required this.weight,
-    required this.sets,
+    required this.volume,
+    required this.maxWeight,
   });
 }

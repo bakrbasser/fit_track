@@ -1,17 +1,16 @@
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
 import 'package:fit_track/core/presentation/resources/string_manager.dart';
-import 'package:fit_track/core/presentation/utils/snack_bar_helper.dart';
 import 'package:fit_track/presentation/cubits/days/list/days_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/plans/add/add_plan_cubit.dart';
 import 'package:fit_track/presentation/widgets/buttons.dart';
 import 'package:fit_track/presentation/widgets/cards.dart';
 import 'package:fit_track/presentation/widgets/dialogs.dart';
+import 'package:fit_track/presentation/widgets/general.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddPlan extends StatefulWidget {
-  const AddPlan({super.key, required this.numberOfDays});
-  final int numberOfDays;
+  const AddPlan({super.key});
 
   @override
   State<AddPlan> createState() => _AddPlanState();
@@ -21,63 +20,62 @@ class _AddPlanState extends State<AddPlan> {
   @override
   void initState() {
     super.initState();
-    context.read<DaysListCubit>().loadList();
   }
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('New Training Plan'), actions: [ChooseIcon()]),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _PlanNameField(),
-              SizedBox(height: 30),
-              TextFormField(
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(12),
-                  hintText: 'Description',
-                ),
-                style: FontsManager.lexendRegular(),
-                maxLines: 4,
-                onChanged: (value) {
-                  context.read<AddPlanCubit>().description = value;
-                },
-              ),
-
-              SizedBox(height: 30),
-              Text('Days', style: FontsManager.lexendBold(size: 25)),
-              SizedBox(height: 15),
-              PlanDaysList(numberOfDays: widget.numberOfDays),
-              SizedBox(height: 30),
-              Padding(
-                padding: EdgeInsets.only(bottom: 5),
-                child: Buttons.saveButton(
-                  onPressed: () async {
-                    final nav = Navigator.of(context);
-                    final cub = context.read<AddPlanCubit>();
-                    if (_formKey.currentState!.validate()) {
-                      if (cub.checkFullDays(widget.numberOfDays)) {
-                        await cub.addPlan();
-                        nav.pop(cub.isAdded);
-                      } else {
-                        SnackBarHelper.showMessage(
-                          context,
-                          'One Training Day Or More Is Not Assigned',
-                        );
-                      }
-                    }
+    return BlocListener<AddPlanCubit, AddPlanState>(
+      listener: (context, state) {
+        if (state is Error) {
+          showConfirmationDialog(context, state.message);
+        }
+        if (state is AddedPlan) {
+          context.read<DaysListCubit>().addPlanDays(state.plan.id!);
+          Navigator.pop(context, true);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('New Training Plan'),
+          actions: [ChooseIcon()],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PlanNameField(
+                  onChanged: (value) {
+                    context.read<AddPlanCubit>().name = value;
                   },
-                  child: Text('Add Training Plan'),
                 ),
-              ),
-            ],
+                SizedBox(height: 30),
+                PlanDescriptionField(
+                  onChanged: (value) {
+                    context.read<AddPlanCubit>().description = value;
+                  },
+                ),
+                SizedBox(height: 30),
+
+                AddPlanDaysList(),
+                SizedBox(height: 30),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 5),
+                  child: Buttons.costumeButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await context.read<AddPlanCubit>().addPlan();
+                      }
+                    },
+                    child: Text('Add Training Plan'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -105,12 +103,14 @@ class ChooseIcon extends StatelessWidget {
   }
 }
 
-class _PlanNameField extends StatelessWidget {
-  const _PlanNameField();
-
+class PlanNameField extends StatelessWidget {
+  const PlanNameField({super.key, required this.onChanged, this.controller});
+  final void Function(String value) onChanged;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(hintText: 'Plan Name'),
       style: FontsManager.lexendRegular(),
       validator: (value) {
@@ -122,26 +122,78 @@ class _PlanNameField extends StatelessWidget {
         return null;
       },
       onChanged: (value) {
-        context.read<AddPlanCubit>().name = value;
+        onChanged(value);
       },
     );
   }
 }
 
-class PlanDaysList extends StatelessWidget {
-  const PlanDaysList({super.key, required this.numberOfDays});
-  final int numberOfDays;
+class PlanDescriptionField extends StatelessWidget {
+  const PlanDescriptionField({
+    super.key,
+    required this.onChanged,
+    this.controller,
+  });
+  final void Function(String value) onChanged;
+  final TextEditingController? controller;
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(12),
+        hintText: 'Description',
+      ),
+      style: FontsManager.lexendRegular(),
+      maxLines: 4,
+      onChanged: (value) {
+        onChanged(value);
+      },
+    );
+  }
+}
 
+class AddPlanDaysList extends StatefulWidget {
+  const AddPlanDaysList({super.key});
+
+  @override
+  State<AddPlanDaysList> createState() => _AddPlanDaysListState();
+}
+
+class _AddPlanDaysListState extends State<AddPlanDaysList> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
-        itemCount: numberOfDays,
-        itemBuilder:
-            (context, index) => Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: AddDayCard(index: index),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+          Row(
+            children: [
+              Text('Days', style: FontsManager.lexendBold(size: 25)),
+              Spacer(),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    context.read<DaysListCubit>().numberOfDays++;
+                  });
+                },
+                icon: Icon(Icons.add),
+              ),
+            ],
+          ),
+          SizedBox(height: 15),
+          Expanded(
+            child: ListView.builder(
+              itemCount: context.read<DaysListCubit>().numberOfDays,
+              itemBuilder:
+                  (context, index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: AddDayCard(index: index),
+                  ),
             ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:fit_track/core/presentation/resources/assets_manager.dart';
 import 'package:fit_track/core/presentation/resources/colors_manager.dart';
 import 'package:fit_track/core/presentation/resources/fonts_manager.dart';
+import 'package:fit_track/core/presentation/resources/string_manager.dart';
 import 'package:fit_track/core/presentation/utils/screen_size_helper.dart';
 import 'package:fit_track/domain/entities/exercise.dart';
 import 'package:fit_track/domain/entities/goal.dart';
@@ -9,7 +10,7 @@ import 'package:fit_track/domain/entities/training_plan.dart';
 import 'package:fit_track/presentation/cubits/days/add/add_day_cubit.dart';
 import 'package:fit_track/presentation/cubits/days/list/days_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/exercises/list/exercises_list_cubit.dart';
-import 'package:fit_track/presentation/cubits/plans/add/add_plan_cubit.dart';
+import 'package:fit_track/presentation/cubits/goals/list/goals_list_cubit.dart';
 import 'package:fit_track/presentation/cubits/plans/list/plans_list_cubit.dart';
 import 'package:fit_track/presentation/routes/routes_manager.dart';
 import 'package:fit_track/presentation/widgets/general.dart';
@@ -78,10 +79,39 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconCard(
-      icon: AssetsManager.dumbbell,
-      title: exercise.name,
-      description: exercise.instructions,
+    return Dismissible(
+      confirmDismiss: (_) {
+        return showConfirmationDialog(
+          context,
+          StringManager.deleteExerciseConfirmMessage,
+        );
+      },
+      onDismissed: (_) async {
+        context.read<ExercisesListCubit>().deleteExercise(exercise.id!);
+        context.read<GoalsListCubit>().loadUnAchievedList();
+      },
+      key: Key(exercise.id.toString()),
+      child: InkWell(
+        onTap: () async {
+          final cub = context.read<ExercisesListCubit>();
+          // receives is updated on updating the exercise
+          bool? isUpdated =
+              await Navigator.pushNamed(
+                    context,
+                    Routes.exerciseDetails,
+                    arguments: exercise,
+                  )
+                  as bool?;
+          if (isUpdated != null && isUpdated == true) {
+            cub.loadList();
+          }
+        },
+        child: IconCard(
+          icon: AssetsManager.dumbbell,
+          title: exercise.name,
+          description: exercise.instructions,
+        ),
+      ),
     );
   }
 }
@@ -95,14 +125,27 @@ class GoalCard extends StatelessWidget {
     Exercise exercise = context.read<ExercisesListCubit>().exerciseById(
       goal.exerciseId,
     );
-    return IconCard(
-      icon: AssetsManager.dumbbell,
-      title: exercise.name,
-      description: 'Target ${goal.weight} kg ${goal.reps} times',
+    return Dismissible(
+      confirmDismiss: (_) {
+        return showConfirmationDialog(
+          context,
+          StringManager.deleteGoalConfirmMessage,
+        );
+      },
+      onDismissed: (_) {
+        context.read<GoalsListCubit>().deleteGoal(goal);
+      },
+      key: Key(exercise.id.toString()),
+      child: IconCard(
+        icon: AssetsManager.dumbbell,
+        title: exercise.name,
+        description: 'Target ${goal.weight} kg ${goal.reps} times',
+      ),
     );
   }
 }
 
+// Add new day insider exercise Card
 class MultipleSelectionExerciseCard extends StatefulWidget {
   const MultipleSelectionExerciseCard({super.key, required this.exercise});
   final Exercise exercise;
@@ -149,12 +192,27 @@ class _MultipleStateSelectionExerciseCard
               width: 30,
               height: 40,
               child: TextField(
+                keyboardType: TextInputType.number,
+                style: FontsManager.lexendRegular(size: 14),
+
+                readOnly: !selected,
                 decoration: InputDecoration(
                   filled: false,
                   hintText: '$sets',
                   border: UnderlineInputBorder(),
                   contentPadding: EdgeInsets.zero,
                 ),
+                onChanged: (value) {
+                  if (value == '') {
+                    sets = 3;
+                  } else {
+                    sets = int.parse(value);
+                  }
+                  context.read<AddDayCubit>().updateSets(
+                    widget.exercise.id!,
+                    sets,
+                  );
+                },
               ),
             ),
           ],
@@ -169,12 +227,26 @@ class _MultipleStateSelectionExerciseCard
               width: 30,
               height: 40,
               child: TextField(
+                style: FontsManager.lexendRegular(size: 14),
+                keyboardType: TextInputType.number,
+                readOnly: !selected,
                 decoration: InputDecoration(
                   filled: false,
                   hintText: '$reps',
                   border: UnderlineInputBorder(),
                   contentPadding: EdgeInsets.zero,
                 ),
+                onChanged: (value) {
+                  if (value == '') {
+                    reps = 10;
+                  } else {
+                    reps = int.parse(value);
+                  }
+                  context.read<AddDayCubit>().updateReps(
+                    widget.exercise.id!,
+                    reps,
+                  );
+                },
               ),
             ),
           ],
@@ -190,23 +262,55 @@ class PlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconCard(
-      icon: plan.icon ?? AssetsManager.dumbbell,
-      title: plan.name,
-      description: plan.description,
-      action: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor:
-              plan.isActivated ? ColorsManager.grey : ColorsManager.darkGreen,
-        ),
-        onPressed: () async {
-          plan.isActivated
-              ? await context.read<PlansListCubit>().deactivatePlan()
-              : await context.read<PlansListCubit>().activatePlan(plan: plan);
+    return InkWell(
+      onTap: () async {
+        var cubit = context.read<PlansListCubit>();
+        var isUpdated =
+            await Navigator.pushNamed(
+                  context,
+                  Routes.updatePlan,
+                  arguments: plan,
+                )
+                as bool?;
+        if (isUpdated != null && isUpdated == true) {
+          cubit.loadList();
+        }
+      },
+      child: Dismissible(
+        key: Key(plan.id.toString()),
+        confirmDismiss: (direction) {
+          return showConfirmationDialog(
+            context,
+            StringManager.deleteTrainingPlanConfirmMessage,
+          );
         },
-        child: Text(
-          plan.isActivated ? 'De-Activate' : 'Activate',
-          style: FontsManager.lexendMedium(color: Colors.white, size: 14),
+
+        onDismissed: (direction) {
+          context.read<PlansListCubit>().deleteTrainingPlan(plan.id!);
+        },
+        child: IconCard(
+          icon: plan.icon ?? AssetsManager.dumbbell,
+          title: plan.name,
+          description: plan.description,
+          action: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor:
+                  plan.isActivated
+                      ? ColorsManager.grey
+                      : ColorsManager.darkGreen,
+            ),
+            onPressed: () async {
+              plan.isActivated
+                  ? await context.read<PlansListCubit>().deactivatePlan()
+                  : await context.read<PlansListCubit>().activatePlan(
+                    plan: plan,
+                  );
+            },
+            child: Text(
+              plan.isActivated ? 'De-Activate' : 'Activate',
+              style: FontsManager.lexendMedium(color: Colors.white, size: 14),
+            ),
+          ),
         ),
       ),
     );
@@ -254,87 +358,109 @@ class DayCard extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class AddDayCard extends StatefulWidget {
-  const AddDayCard({super.key, required this.index});
+  AddDayCard({
+    super.key,
+    required this.index,
+    this.day,
+    this.exercisesCount = 0,
+  });
   final int index;
-
+  TrainingDay? day;
+  int exercisesCount;
   @override
   State<AddDayCard> createState() => _AddDayCardState();
 }
 
 class _AddDayCardState extends State<AddDayCard> {
-  int exercisesCount = 0;
   String title = '';
   @override
   void initState() {
     super.initState();
-    title = 'Day ${widget.index + 1}';
+    widget.day ??
+        context.read<DaysListCubit>().dayExercisesCount(widget.day!.id!);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: FontsManager.lexendMedium(size: 22)),
-            Text(
-              '$exercisesCount exercises',
-              style: FontsManager.lexendMedium(
-                color: ColorsManager.textGrey,
-                size: 16,
+    return Dismissible(
+      key: Key(widget.index.toString()),
+      confirmDismiss: (direction) {
+        return showConfirmationDialog(
+          context,
+          StringManager.deleteDayFromPlanConfirmMessage,
+        );
+      },
+      onDismissed: (direction) {
+        context.read<DaysListCubit>().removeDayFromNewPlan(widget.index);
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.day != null ? widget.day!.name : 'Day ${widget.index}',
+                style: FontsManager.lexendMedium(size: 22),
               ),
-            ),
-          ],
-        ),
-        Spacer(),
-        // Select from existing days
-        IconButton(
-          onPressed: () async {
-            final dayCubit = context.read<DaysListCubit>();
-            final planCubit = context.read<AddPlanCubit>();
-            final TrainingDay? day = await showModalBottomSheet(
-              context: context,
-              builder:
-                  (context) => BlocProvider(
-                    create: (context) => DaysListCubit(),
-                    child: TrainingDayBottomBar(),
-                  ),
-            );
-            if (day != null) {
-              exercisesCount = await dayCubit.dayExercisesCount(day.id!);
-              planCubit.trainingDaysIds[widget.index] = day.id!;
+              Text(
+                '${widget.exercisesCount} exercises',
+                style: FontsManager.lexendMedium(
+                  color: ColorsManager.textGrey,
+                  size: 16,
+                ),
+              ),
+            ],
+          ),
+          Spacer(),
+          // Select from existing days
+          IconButton(
+            onPressed: () async {
+              final dayCubit = context.read<DaysListCubit>();
+              final TrainingDay? day = await showModalBottomSheet(
+                context: context,
+                builder:
+                    (context) => BlocProvider(
+                      create: (context) => DaysListCubit(),
+                      child: TrainingDayBottomBar(),
+                    ),
+              );
+              if (day != null) {
+                var assigned = dayCubit.assignDayToPlan(day, widget.index);
+                if (assigned) {
+                  widget.exercisesCount = await dayCubit.dayExercisesCount(
+                    day.id!,
+                  );
+                  setState(() {
+                    widget.day = day;
+                  });
+                }
+              }
+            },
+            icon: Icon(Icons.list, color: Colors.white),
+          ),
+          SizedBox(width: 5),
+          // Create New Training Day
+          IconButton(
+            onPressed: () async {
+              final addedDayInfo =
+                  await Navigator.pushNamed(context, Routes.addDay)
+                      as Map<String, dynamic>?;
 
-              setState(() {
-                title = day.name;
-              });
-            }
-          },
-          icon: Icon(Icons.list, color: Colors.white),
-        ),
-        SizedBox(width: 5),
-        // Create New Training Day
-        IconButton(
-          onPressed: () async {
-            final planCubit = context.read<AddPlanCubit>();
-            final paras =
-                await Navigator.pushNamed(context, Routes.addDay)
-                    as Map<String, Object>;
-            if (paras['isAdded'] as bool) {
-              planCubit.trainingDaysIds[widget.index] = paras['id'] as int;
-
-              setState(() {
-                title = paras['name'] as String;
-                exercisesCount = paras['count'] as int;
-              });
-            }
-          },
-          icon: Icon(Icons.add, color: Colors.white),
-        ),
-      ],
+              if (addedDayInfo != null) {
+                setState(() {
+                  widget.day = addedDayInfo['day'];
+                  widget.exercisesCount = addedDayInfo['count'];
+                });
+              }
+            },
+            icon: Icon(Icons.add, color: Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -375,12 +501,7 @@ class TrainingDayCard extends StatelessWidget {
           ),
         ),
         Spacer(),
-        IconButton(
-          onPressed: () {
-            // TODO : Edit training day screen
-          },
-          icon: Icon(Icons.edit, color: Colors.white),
-        ),
+
         SizedBox(width: 5),
         // This button select training for a training plan or show the day detail depending on the parent screen
         IconButton(

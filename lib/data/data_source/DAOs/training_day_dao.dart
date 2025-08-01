@@ -1,6 +1,5 @@
-import 'package:fit_track/core/database_consts.dart';
+import 'package:fit_track/core/data_sources_consts.dart';
 import 'package:fit_track/data/data_source/app_database.dart';
-import 'package:fit_track/data/models/exercise_model.dart';
 import 'package:fit_track/data/models/training_day_exercise_model.dart';
 import 'package:fit_track/data/models/training_day_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -47,13 +46,14 @@ class TrainingDayDao {
     required TrainingDayExerciseModel trainingDayExercise,
   }) async {
     final db = await _db;
+
     await db.insert(
       TablesName.trainingDayExercise,
       trainingDayExercise.toJson(),
     );
   }
 
-  Future removeTrainingDayExercises({
+  Future removeTrainingDayExercise({
     required TrainingDayExerciseModel trainingDayExercise,
   }) async {
     final db = await _db;
@@ -67,21 +67,13 @@ class TrainingDayDao {
     );
   }
 
-  Future<List<DetailedExerciseModel>> fetchTrainingDayExercises({
-    required int trainingDayID,
-  }) async {
+  Future removeAllTrainingDayExercise({required int trainingDayId}) async {
     final db = await _db;
-    final query = await db.rawQuery(
-      '''
-    SELECT exercise_id, sets, reps
-      FROM exercise
-          INNER JOIN
-          trainingDay_exercise ON exercise.id = exercise_id
-    WHERE trainingDay_id = ?;
-''',
-      [trainingDayID],
+    await db.delete(
+      TablesName.trainingDayExercise,
+      where: 'trainingDay_id = ?',
+      whereArgs: [trainingDayId],
     );
-    return query.map((e) => DetailedExerciseModel.fromJson(e)).toList();
   }
 
   Future<int> dayExercisesCount(int dayId) async {

@@ -6,21 +6,13 @@ part 'pages_navigator_state.dart';
 class PagesNavigatorCubit extends Cubit<PagesNavigatorState> {
   PagesNavigatorCubit() : super(NavigatingHome());
 
-  void navigate(int pageIdx) {
-    switch (pageIdx) {
-      case 0:
-        emit(NavigatingHome());
-        break;
-      case 1:
-        emit(NavigatingExercises());
-        break;
-      case 2:
-        emit(NavigatingPlans());
-        break;
-      case 3:
-        emit(NavigatingGoals());
-        break;
-      default:
-    }
+  void navigate(int index) {
+    emit(switch (index) {
+      0 => NavigatingHome(),
+      1 => NavigatingExercises(),
+      2 => NavigatingPlans(),
+      3 => NavigatingGoals(),
+      _ => NavigatingHome(),
+    });
   }
 }
